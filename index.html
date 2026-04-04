@@ -1,0 +1,3956 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مستقبل التكنولوجيا | انضم إلى الفريق</title>
+
+    <!-- خط IBM Plex Arabic — نفس الخط اللي يوسف اختاره من البداية، ما راح نغيره -->
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ================================================================
+           🎨 متغيرات التصميم — Light Mode (الوضع الافتراضي)
+           يوسف: هاي المتغيرات هي "قلب" الموقع، كل شي مبني عليها.
+           إذا حبيت تغير لون معين، غيره هنا بس وراح يتغير بكل مكان.
+           ================================================================ */
+        :root {
+            --primary: #000000;
+            --secondary: #ffffff;
+            --gray-100: #f5f5f7;
+            --gray-200: #e8e8ed;
+            --gray-300: #d2d2d7;
+            --gray-400: #b0b0b5;
+            --text-main: #1d1d1f;
+            --text-secondary: #86868b;
+            --text-tertiary: #aeaeb2;
+            --accent-blue: #0066cc;
+            --accent-green: #28a745;
+            --shadow-soft: 0 4px 20px rgba(0,0,0,0.06);
+            --shadow-medium: 0 10px 40px rgba(0,0,0,0.10);
+            --shadow-strong: 0 20px 60px rgba(0,0,0,0.15);
+            --transition: all 0.5s cubic-bezier(0.28, 0.11, 0.32, 1);
+            --transition-fast: all 0.25s cubic-bezier(0.28, 0.11, 0.32, 1);
+            --border-radius: 18px;
+            --border-radius-sm: 12px;
+            --border-radius-lg: 28px;
+            --border-radius-pill: 999px;
+            --nav-bg: rgba(255, 255, 255, 0.82);
+            --modal-bg: rgba(0, 0, 0, 0.45);
+            --progress-bg: rgba(0,0,0,0.08);
+            --card-hover-shadow: 0 20px 50px rgba(0,0,0,0.08);
+            --input-bg: #f5f5f7;
+            --tag-bg: #f0f0f5;
+            --tag-color: #1d1d1f;
+            --divider: rgba(0,0,0,0.08);
+            --success: #28a745;
+            --warning: #f0a500;
+            --error-color: #d93025;
+        }
+
+        /* ================================================================
+           🌙 Dark Mode — وضع الليل
+           يوسف: لما يضغط المستخدم على زر الليل، هاي المتغيرات تنحل
+           محل متغيرات الـ light وكل شي يتغير تلقائي بدون ما تكتب
+           CSS ثاني. هاي فلسفة الـ CSS Variables.
+           ================================================================ */
+        [data-theme="dark"] {
+            --primary: #f5f5f7;
+            --secondary: #000000;
+            --gray-100: #111111;
+            --gray-200: #1c1c1e;
+            --gray-300: #2c2c2e;
+            --gray-400: #48484a;
+            --text-main: #f5f5f7;
+            --text-secondary: #98989d;
+            --text-tertiary: #636366;
+            --accent-blue: #2997ff;
+            --shadow-soft: 0 4px 20px rgba(0,0,0,0.4);
+            --shadow-medium: 0 10px 40px rgba(0,0,0,0.5);
+            --shadow-strong: 0 20px 60px rgba(0,0,0,0.6);
+            --nav-bg: rgba(0, 0, 0, 0.82);
+            --modal-bg: rgba(0, 0, 0, 0.75);
+            --progress-bg: rgba(255,255,255,0.1);
+            --card-hover-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            --input-bg: #1c1c1e;
+            --tag-bg: #2c2c2e;
+            --tag-color: #f5f5f7;
+            --divider: rgba(255,255,255,0.08);
+        }
+
+        /* ================================================================
+           🔧 الـ Reset والأساسيات
+           يوسف: هاي قاعدة الموقع — نخلي كل browser يشتغل بنفس الطريقة
+           ================================================================ */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            background-color: var(--secondary);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* تخصيص شريط التمرير */
+        ::-webkit-scrollbar { width: 7px; }
+        ::-webkit-scrollbar-track { background: var(--secondary); }
+        ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
+
+        /* ================================================================
+           📊 شريط التقدم في الأعلى (Scroll Progress Bar)
+           يوسف: هاي شريط رفيع يحتل أعلى الصفحة، يكبر بكلما تتمرر
+           للأسفل — يعطي المستخدم إحساس وين هو بالصفحة
+           ================================================================ */
+        #scroll-progress-bar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 3px;
+            width: 0%;
+            background: var(--primary);
+            z-index: 99999;
+            transition: width 0.05s linear;
+            border-radius: 0 0 2px 2px;
+        }
+
+        /* ================================================================
+           🧭 القائمة العلوية (Navigation)
+           يوسف: الـ nav ثابت (fixed) دائماً فوق الصفحة، مع تأثير
+           Glassmorphism خفيف باستخدام backdrop-filter
+           ================================================================ */
+        nav {
+            position: fixed;
+            top: 3px; /* نخليها تحت شريط التقدم */
+            width: 100%;
+            height: 60px;
+            background: var(--nav-bg);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 9999;
+            border-bottom: 1px solid var(--divider);
+            transition: height 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
+        }
+
+        .nav-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 22px;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: 600;
+            color: var(--primary);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+            transition: opacity 0.2s;
+        }
+        .logo:hover { opacity: 0.7; }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-size: 12px;
+            color: var(--text-main);
+            text-decoration: none;
+            opacity: 0.8;
+            transition: var(--transition-fast);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 1px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover { opacity: 1; }
+        .nav-links a:hover::after { width: 100%; }
+
+        /* مجموعة أزرار الـ Nav اليمين */
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        /* زر الوضع الليلي — يوسف: هاي الزر يبدل بين الليل والنهار */
+        .theme-toggle {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--border-radius-pill);
+            border: 1px solid var(--gray-300);
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-fast);
+            color: var(--text-main);
+        }
+        .theme-toggle:hover {
+            background: var(--gray-100);
+        }
+        .theme-toggle svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--text-main);
+            transition: var(--transition-fast);
+        }
+
+        /* أيقونة الشمس — تظهر بالوضع الليلي */
+        .icon-sun { display: none; }
+        .icon-moon { display: block; }
+        [data-theme="dark"] .icon-sun { display: block; }
+        [data-theme="dark"] .icon-moon { display: none; }
+
+        .btn-auth {
+            font-size: 12px;
+            padding: 6px 16px;
+            border-radius: var(--border-radius-pill);
+            cursor: pointer;
+            border: none;
+            transition: var(--transition-fast);
+            font-weight: 500;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--gray-300);
+        }
+        .btn-login:hover {
+            background: var(--gray-100);
+        }
+
+        .btn-signup {
+            background: var(--primary);
+            color: var(--secondary);
+        }
+        .btn-signup:hover {
+            opacity: 0.8;
+        }
+
+        /* موبايل منيو تبديل */
+        .mobile-toggle {
+            display: none;
+            cursor: pointer;
+            color: var(--text-main);
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+
+        /* Mobile Nav Drawer */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 63px;
+            right: 0;
+            left: 0;
+            background: var(--secondary);
+            border-bottom: 1px solid var(--divider);
+            padding: 20px 22px;
+            z-index: 9998;
+            flex-direction: column;
+            gap: 20px;
+            animation: slideDown 0.3s ease;
+        }
+        .mobile-nav.open { display: flex; }
+        .mobile-nav a {
+            font-size: 17px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .mobile-nav .mobile-btns {
+            display: flex;
+            gap: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--divider);
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ================================================================
+           🦸 قسم البطل الرئيسي (Hero Section)
+           يوسف: أول شي يشوفه الزائر — لازم يكون قوي ومؤثر.
+           استخدمنا animation-fill-mode: forwards حتى ما يرجع للحالة
+           الأولى بعد انتهاء الأنيميشن.
+           ================================================================ */
+        .hero {
+            padding-top: 130px;
+            padding-bottom: 80px;
+            text-align: center;
+            background: var(--secondary);
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border: 1px solid var(--gray-300);
+            padding: 6px 16px;
+            border-radius: var(--border-radius-pill);
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: appleIn 0.8s 0.1s forwards;
+        }
+        .hero-eyebrow-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.85); }
+        }
+
+        .hero h1 {
+            font-size: 80px;
+            font-weight: 600;
+            letter-spacing: -3px;
+            line-height: 1.05;
+            margin-bottom: 24px;
+            color: var(--text-main);
+            transform: translateY(30px);
+            opacity: 0;
+            animation: appleIn 1s 0.2s forwards;
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            color: var(--text-secondary);
+        }
+
+        .hero-subtitle {
+            font-size: 26px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-bottom: 44px;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.4;
+            transform: translateY(30px);
+            opacity: 0;
+            animation: appleIn 1s 0.35s forwards;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+            transform: translateY(30px);
+            opacity: 0;
+            animation: appleIn 1s 0.5s forwards;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background: var(--primary);
+            color: var(--secondary);
+            border-radius: var(--border-radius-pill);
+            font-size: 16px;
+            font-weight: 500;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            transition: var(--transition-fast);
+        }
+        .btn-primary:hover { opacity: 0.82; transform: translateY(-1px); }
+
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background: transparent;
+            color: var(--accent-blue);
+            border-radius: var(--border-radius-pill);
+            font-size: 16px;
+            font-weight: 500;
+            text-decoration: none;
+            border: 1px solid var(--gray-300);
+            cursor: pointer;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            transition: var(--transition-fast);
+        }
+        .btn-ghost:hover {
+            background: var(--gray-100);
+            transform: translateY(-1px);
+        }
+
+        .hero-img-box {
+            margin-top: 80px;
+            width: 100%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 20px;
+        }
+
+        .hero-img-box img {
+            width: 100%;
+            border-radius: 30px;
+            box-shadow: var(--shadow-strong);
+            transform: scale(0.95) translateY(20px);
+            opacity: 0;
+            animation: appleScale 1.5s 0.6s forwards;
+            display: block;
+        }
+
+        /* ================================================================
+           📈 قسم الإحصائيات (Stats)
+           يوسف: هاي الأرقام تتحرك تدريجياً بستخدام JS (Counter Animation)
+           ================================================================ */
+        .stats-section {
+            padding: 100px 20px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            max-width: 1100px;
+            margin: 0 auto;
+            gap: 40px;
+            border-top: 1px solid var(--divider);
+            border-bottom: 1px solid var(--divider);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 52px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 6px;
+            letter-spacing: -2px;
+            color: var(--text-main);
+        }
+
+        .stat-label {
+            font-size: 17px;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* ================================================================
+           🛠️ قسم الخدمات (Services Section)
+           يوسف: هاي القسم الجديد — نعرض فيه خدمات الشركة بشكل منظم
+           استخدمنا grid ذكي: minmax حتى يتكيف مع أي عرض شاشة
+           ================================================================ */
+        .services-section {
+            padding: 120px 20px;
+            background: var(--secondary);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: var(--gray-100);
+            border-radius: var(--border-radius);
+            padding: 44px 40px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--divider);
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease;
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover {
+            box-shadow: var(--card-hover-shadow);
+            transform: translateY(-4px);
+        }
+
+        .service-icon {
+            width: 52px;
+            height: 52px;
+            background: var(--secondary);
+            border-radius: var(--border-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 28px;
+            color: var(--primary);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .service-icon svg {
+            width: 26px;
+            height: 26px;
+            stroke: var(--primary);
+            fill: none;
+        }
+
+        .service-card h3 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: -0.3px;
+        }
+
+        .service-card p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .service-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 12px;
+            background: var(--tag-bg);
+            color: var(--tag-color);
+            border-radius: var(--border-radius-pill);
+            letter-spacing: 0.3px;
+            opacity: 0.7;
+        }
+
+        /* ================================================================
+           🗺️ قسم طريقة العمل (Process / Roadmap)
+           يوسف: هاي قسم Timeline يوضح للزبون كيف نشتغل خطوة بخطوة
+           كل step موصولة بالثانية بخط بصري
+           ================================================================ */
+        .process-section {
+            padding: 120px 20px;
+            background: var(--gray-100);
+        }
+
+        .process-timeline {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* الخط العمودي اللي يربط الخطوات */
+        .process-timeline::before {
+            content: '';
+            position: absolute;
+            right: calc(50% - 1px);
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gray-300);
+        }
+
+        .process-step {
+            display: flex;
+            gap: 60px;
+            align-items: flex-start;
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        /* خطوات اليمين واليسار بالتبادل */
+        .process-step:nth-child(odd) {
+            flex-direction: row;
+        }
+        .process-step:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .process-step-content {
+            flex: 1;
+            text-align: right;
+        }
+        .process-step:nth-child(even) .process-step-content {
+            text-align: left;
+        }
+
+        .process-step-num {
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 0 0 8px var(--gray-100);
+        }
+
+        .process-step h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .process-step p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .process-step-icon {
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+        .process-step-icon svg {
+            width: 30px;
+            height: 30px;
+            stroke: var(--primary);
+            fill: none;
+            opacity: 0.5;
+        }
+
+        /* ================================================================
+           👥 قسم الفريق (Team Section)
+           يوسف: نعرض هنا القادة البارزين بالشركة. الصور جاية من Unsplash
+           بس لو عندك صور حقيقية، غير الـ src
+           ================================================================ */
+        .team-section {
+            padding: 120px 20px;
+            background: var(--secondary);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .team-card {
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .team-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .team-photo {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin-bottom: 20px;
+            background: var(--gray-200);
+        }
+
+        .team-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+            display: block;
+            filter: grayscale(20%);
+        }
+
+        .team-card:hover .team-photo img {
+            transform: scale(1.06);
+            filter: grayscale(0%);
+        }
+
+        .team-card h4 {
+            font-size: 19px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .team-card span {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .team-socials {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .team-socials a {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid var(--gray-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: var(--transition-fast);
+            text-decoration: none;
+        }
+        .team-socials a:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .team-socials svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            fill: none;
+        }
+
+        /* ================================================================
+           💬 قسم الشهادات (Testimonials)
+           يوسف: آراء موظفين حقيقيين من الشركة — تعطي مصداقية قوية
+           ================================================================ */
+        .testimonials-section {
+            padding: 120px 20px;
+            background: var(--primary);
+            color: var(--secondary);
+            overflow: hidden;
+        }
+
+        .testimonials-section .section-header h2 {
+            color: var(--secondary);
+        }
+
+        .testimonials-section .section-header p {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .testimonials-track-wrapper {
+            overflow: hidden;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* تأثير ضبابي على الجوانب */
+        .testimonials-track-wrapper::before,
+        .testimonials-track-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100px;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .testimonials-track-wrapper::before {
+            right: 0;
+            background: linear-gradient(to left, var(--primary), transparent);
+        }
+        .testimonials-track-wrapper::after {
+            left: 0;
+            background: linear-gradient(to right, var(--primary), transparent);
+        }
+
+        .testimonials-track {
+            display: flex;
+            gap: 24px;
+            animation: scrollTrack 40s linear infinite;
+            width: max-content;
+        }
+
+        .testimonials-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scrollTrack {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        .testimonial-card {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: var(--border-radius);
+            padding: 36px;
+            width: 360px;
+            min-width: 360px;
+            flex-shrink: 0;
+        }
+
+        .testimonial-stars {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 18px;
+        }
+
+        .testimonial-stars svg {
+            width: 16px;
+            height: 16px;
+            fill: #FFD60A;
+        }
+
+        .testimonial-card blockquote {
+            font-size: 16px;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 28px;
+            font-style: normal;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .testimonial-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .testimonial-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .testimonial-author-info strong {
+            display: block;
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .testimonial-author-info span {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* ================================================================
+           🔍 قسم الوظائف مع البحث (Jobs with Search/Filter)
+           يوسف: هاي القسم الأقوى في الصفحة —
+           جاهزنا له نظام بحث وفلترة حقيقي بالـ JS
+           ================================================================ */
+        .departments {
+            background-color: var(--gray-100);
+            padding: 120px 20px;
+        }
+
+        /* شريط البحث */
+        .jobs-search-bar {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+
+        .jobs-search-bar input {
+            width: 100%;
+            padding: 16px 52px 16px 20px;
+            border-radius: var(--border-radius-pill);
+            border: 1px solid var(--gray-300);
+            background: var(--secondary);
+            color: var(--text-main);
+            font-size: 16px;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            outline: none;
+            transition: var(--transition-fast);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .jobs-search-bar input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--progress-bg);
+        }
+
+        .jobs-search-bar input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .jobs-search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            pointer-events: none;
+        }
+        .jobs-search-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text-secondary);
+            fill: none;
+        }
+
+        /* فلاتر الوظائف */
+        .jobs-filters {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+
+        .filter-btn {
+            font-size: 13px;
+            padding: 7px 18px;
+            border-radius: var(--border-radius-pill);
+            border: 1px solid var(--gray-300);
+            background: var(--secondary);
+            color: var(--text-main);
+            cursor: pointer;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            transition: var(--transition-fast);
+            font-weight: 500;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary);
+            color: var(--secondary);
+            border-color: var(--primary);
+        }
+
+        /* رسالة "لا توجد نتائج" */
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-secondary);
+        }
+
+        .no-results svg {
+            width: 48px;
+            height: 48px;
+            stroke: var(--text-tertiary);
+            fill: none;
+            margin-bottom: 20px;
+        }
+
+        .no-results h3 {
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        /* ================================================================
+           🃏 قسم التبويب (Tabs)
+           ================================================================ */
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 60px;
+        }
+
+        .section-header h2 {
+            font-size: 48px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            letter-spacing: -1.5px;
+            color: var(--text-main);
+        }
+
+        .section-header p {
+            font-size: 19px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .tab-nav {
+            display: flex;
+            justify-content: center;
+            gap: 36px;
+            margin-bottom: 50px;
+            border-bottom: 1px solid var(--gray-300);
+            padding-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-link {
+            font-size: 17px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            position: relative;
+            padding-bottom: 4px;
+            user-select: none;
+        }
+
+        .tab-link.active {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .tab-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -22px;
+            right: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+            border-radius: 1px;
+        }
+
+        .tab-pane {
+            display: none;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-pane.active {
+            display: grid;
+        }
+
+        /* ================================================================
+           📋 بطاقات الوظائف (Job Cards)
+           يوسف: كل بطاقة تحتوي على: اسم الوظيفة، وصف، موقع، نوع،
+           وزر التقديم. الـ data-* attributes نستخدمها بالفلترة
+           ================================================================ */
+        .job-card {
+            background: var(--secondary);
+            padding: 36px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid var(--divider);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .job-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--border-radius);
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: inset 0 0 0 2px var(--primary);
+        }
+
+        .job-card:hover::after { opacity: 0.15; }
+
+        .job-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-hover-shadow);
+        }
+
+        .job-card-top {
+            margin-bottom: 24px;
+        }
+
+        .job-badge {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: var(--border-radius-pill);
+            margin-bottom: 14px;
+        }
+
+        .badge-remote { background: #e6f4ea; color: #28a745; }
+        .badge-onsite { background: #e8f0fe; color: #1a73e8; }
+        .badge-hybrid { background: #fef7e0; color: #f0a500; }
+
+        [data-theme="dark"] .badge-remote { background: #1a2e1f; color: #4caf50; }
+        [data-theme="dark"] .badge-onsite { background: #1a2035; color: #4a9eff; }
+        [data-theme="dark"] .badge-hybrid { background: #2e2510; color: #ffc107; }
+
+        .job-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            letter-spacing: -0.3px;
+        }
+
+        .job-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.65;
+        }
+
+        .job-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 500;
+            padding-top: 20px;
+            border-top: 1px solid var(--divider);
+            color: var(--text-secondary);
+        }
+
+        .job-location {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .job-location svg {
+            width: 13px;
+            height: 13px;
+            stroke: var(--text-secondary);
+            fill: none;
+            flex-shrink: 0;
+        }
+
+        .btn-apply-small {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            transition: var(--transition-fast);
+        }
+
+        .btn-apply-small:hover {
+            opacity: 0.7;
+        }
+
+        /* ================================================================
+           🖼️ معرض الصور (Gallery)
+           ================================================================ */
+        .gallery-section {
+            padding: 120px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: 320px 320px;
+            gap: 20px;
+        }
+
+        .gallery-item {
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            background: var(--gray-200);
+        }
+
+        .gallery-item:first-child {
+            grid-row: 1 / 3;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s ease;
+            display: block;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.04);
+        }
+
+        .gallery-item-label {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: var(--border-radius-pill);
+            backdrop-filter: blur(10px);
+        }
+
+        /* ================================================================
+           ❓ قسم الأسئلة الشائعة (FAQ / Accordion)
+           يوسف: نفس لوجيك الأكورديون، بس بضفنا له أسئلة أكثر
+           وتصميم محسّن مع أيقونات SVG
+           ================================================================ */
+        .faq-section {
+            padding: 120px 20px;
+            background: var(--gray-100);
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .accordion-item {
+            border-bottom: 1px solid var(--gray-300);
+        }
+
+        .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-size: 19px;
+            font-weight: 500;
+            padding: 24px 0;
+            color: var(--text-main);
+            user-select: none;
+            gap: 20px;
+            transition: var(--transition-fast);
+        }
+
+        .accordion-header:hover {
+            color: var(--text-secondary);
+        }
+
+        .accordion-icon {
+            width: 28px;
+            height: 28px;
+            min-width: 28px;
+            border-radius: 50%;
+            background: var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-fast);
+        }
+
+        .accordion-icon svg {
+            width: 14px;
+            height: 14px;
+            stroke: var(--text-main);
+            fill: none;
+            transition: transform 0.35s ease;
+        }
+
+        .accordion-item.active .accordion-icon {
+            background: var(--primary);
+        }
+        .accordion-item.active .accordion-icon svg {
+            stroke: var(--secondary);
+            transform: rotate(45deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
+            color: var(--text-secondary);
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        .accordion-item.active .accordion-content {
+            max-height: 400px;
+            padding-bottom: 24px;
+        }
+
+        /* ================================================================
+           📬 قسم النشرة البريدية (Newsletter)
+           يوسف: قسم بسيط لجمع الإيميلات — مهم للمنتج
+           ================================================================ */
+        .newsletter-section {
+            padding: 100px 20px;
+            background: var(--secondary);
+            text-align: center;
+        }
+
+        .newsletter-inner {
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        .newsletter-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gray-100);
+            border-radius: var(--border-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+        .newsletter-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--primary);
+            fill: none;
+        }
+
+        .newsletter-inner h2 {
+            font-size: 38px;
+            font-weight: 600;
+            margin-bottom: 14px;
+            letter-spacing: -1px;
+        }
+
+        .newsletter-inner p {
+            font-size: 17px;
+            color: var(--text-secondary);
+            margin-bottom: 36px;
+            line-height: 1.5;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 10px;
+            max-width: 440px;
+            margin: 0 auto;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 14px 20px;
+            border-radius: var(--border-radius-pill);
+            border: 1px solid var(--gray-300);
+            background: var(--gray-100);
+            color: var(--text-main);
+            font-size: 15px;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            outline: none;
+            transition: var(--transition-fast);
+        }
+        .newsletter-form input:focus {
+            border-color: var(--primary);
+        }
+        .newsletter-form input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .newsletter-form button {
+            padding: 14px 24px;
+            background: var(--primary);
+            color: var(--secondary);
+            border: none;
+            border-radius: var(--border-radius-pill);
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            transition: var(--transition-fast);
+            white-space: nowrap;
+        }
+        .newsletter-form button:hover { opacity: 0.8; }
+
+        /* ================================================================
+           🦶 التذييل (Footer)
+           ================================================================ */
+        footer {
+            background: var(--gray-100);
+            padding: 70px 20px 40px;
+            border-top: 1px solid var(--divider);
+        }
+
+        .footer-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr repeat(4, 1fr);
+            gap: 40px;
+        }
+
+        .footer-brand { }
+
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: block;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .footer-desc {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 24px;
+            max-width: 240px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 10px;
+        }
+
+        .footer-social a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid var(--gray-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: var(--transition-fast);
+            text-decoration: none;
+        }
+        .footer-social a:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--secondary);
+        }
+        .footer-social svg {
+            width: 15px;
+            height: 15px;
+            stroke: currentColor;
+            fill: none;
+        }
+
+        .footer-links-col h4 {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-secondary);
+            margin-bottom: 18px;
+        }
+
+        .footer-links-col a {
+            display: block;
+            font-size: 13px;
+            color: var(--text-main);
+            text-decoration: none;
+            margin-bottom: 12px;
+            opacity: 0.75;
+            transition: var(--transition-fast);
+        }
+        .footer-links-col a:hover { opacity: 1; }
+
+        .footer-bottom {
+            max-width: 1100px;
+            margin: 50px auto 0;
+            padding-top: 24px;
+            border-top: 1px solid var(--divider);
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-bottom a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+        .footer-bottom a:hover { color: var(--text-main); }
+
+        /* ================================================================
+           🪟 النوافذ المنبثقة (Modals)
+           يوسف: استخدمنا display flex مع الـ active class
+           لأن display:none ما يدعم الـ transition مباشرة
+           ================================================================ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--modal-bg);
+            -webkit-backdrop-filter: blur(16px);
+            display: none;
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-card {
+            background: var(--secondary);
+            width: 100%;
+            max-width: 460px;
+            border-radius: var(--border-radius-lg);
+            padding: 52px;
+            position: relative;
+            animation: modalIn 0.35s cubic-bezier(0.28, 0.11, 0.32, 1) forwards;
+            border: 1px solid var(--divider);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.92) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 18px;
+            right: 20px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 18px;
+            transition: var(--transition-fast);
+            font-family: inherit;
+        }
+        .close-modal:hover { background: var(--gray-200); }
+
+        .form-title {
+            font-size: 30px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-align: center;
+            letter-spacing: -0.8px;
+        }
+
+        .form-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 36px;
+            line-height: 1.5;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            letter-spacing: 0.2px;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 13px 16px;
+            border-radius: var(--border-radius-sm);
+            border: 1px solid var(--gray-300);
+            background: var(--input-bg);
+            color: var(--text-main);
+            outline: none;
+            font-size: 16px;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            transition: var(--transition-fast);
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            border-color: var(--primary);
+            background: var(--secondary);
+            box-shadow: 0 0 0 3px var(--progress-bg);
+        }
+
+        .input-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .input-group select {
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+
+        /* رفع الملفات */
+        .file-upload-area {
+            border: 2px dashed var(--gray-300);
+            border-radius: var(--border-radius-sm);
+            padding: 28px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            background: var(--input-bg);
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--primary);
+            background: var(--gray-200);
+        }
+
+        .file-upload-area svg {
+            width: 32px;
+            height: 32px;
+            stroke: var(--text-secondary);
+            fill: none;
+            margin-bottom: 10px;
+        }
+
+        .file-upload-area p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .file-upload-area span {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            display: block;
+            margin-top: 4px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: var(--secondary);
+            border: none;
+            border-radius: var(--border-radius-sm);
+            font-size: 17px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 10px;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            transition: var(--transition-fast);
+        }
+        .btn-submit:hover { opacity: 0.85; }
+        .btn-submit:active { transform: scale(0.98); }
+
+        /* رسالة النجاح بعد الإرسال */
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .success-message svg {
+            width: 56px;
+            height: 56px;
+            stroke: var(--success);
+            fill: none;
+            margin-bottom: 20px;
+        }
+        .success-message h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .success-message p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        /* الفاصل */
+        .divider-line {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 18px 0;
+        }
+        .divider-line::before,
+        .divider-line::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--gray-300);
+        }
+        .divider-line span {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        /* ================================================================
+           📱 تجاوب الجوال (Mobile Responsive)
+           يوسف: هاي القواعد تضمن إن الموقع يشتغل بشكل ممتاز
+           على أي شاشة — من الجوال للشاشة الكبيرة
+           ================================================================ */
+        @media (max-width: 900px) {
+            .hero h1 { font-size: 52px; letter-spacing: -2px; }
+            .hero-subtitle { font-size: 20px; }
+            .nav-links, .nav-actions .btn-auth { display: none; }
+            .mobile-toggle { display: flex; }
+            .stats-section { grid-template-columns: 1fr 1fr; gap: 24px; }
+            .footer-content { grid-template-columns: 1fr 1fr; }
+            .gallery-grid { grid-template-columns: 1fr; grid-template-rows: auto; height: auto; }
+            .gallery-item:first-child { grid-row: auto; height: 280px; }
+            .gallery-item { height: 220px; }
+            .section-header h2 { font-size: 34px; }
+            .process-timeline::before { display: none; }
+            .process-step { flex-direction: column !important; align-items: flex-start; gap: 20px; }
+            .process-step-content { text-align: right !important; }
+            .team-grid { grid-template-columns: 1fr 1fr; }
+            .footer-content { grid-template-columns: 1fr 1fr; }
+            .modal-card { padding: 36px 28px; }
+            .newsletter-form { flex-direction: column; }
+        }
+
+        @media (max-width: 550px) {
+            .hero h1 { font-size: 38px; }
+            .hero-subtitle { font-size: 17px; }
+            .stat-number { font-size: 38px; }
+            .section-header h2 { font-size: 28px; }
+            .team-grid { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: 1fr; }
+            .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+            .hero-cta-group { flex-direction: column; align-items: center; }
+        }
+
+        /* ================================================================
+           🎬 الأنيميشن الأساسية (Core Animations)
+           يوسف: هاي الأنيميشنات تستخدم بكل أقسام الموقع
+           ================================================================ */
+        @keyframes appleIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes appleScale {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* كلاس الـ Scroll Reveal */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(36px);
+            transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.28, 0.11, 0.32, 1);
+        }
+
+        .scroll-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Staggered delays لعناصر البطاقات */
+        .scroll-reveal:nth-child(1) { transition-delay: 0.05s; }
+        .scroll-reveal:nth-child(2) { transition-delay: 0.12s; }
+        .scroll-reveal:nth-child(3) { transition-delay: 0.19s; }
+        .scroll-reveal:nth-child(4) { transition-delay: 0.26s; }
+        .scroll-reveal:nth-child(5) { transition-delay: 0.33s; }
+        .scroll-reveal:nth-child(6) { transition-delay: 0.40s; }
+
+        /* ================================================================
+           🍞 تنبيه Toast (للإشعارات)
+           يوسف: يظهر في أسفل الشاشة لفترة قصيرة ثم يختفي
+           ================================================================ */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: var(--primary);
+            color: var(--secondary);
+            padding: 14px 28px;
+            border-radius: var(--border-radius-pill);
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 99999;
+            transition: transform 0.4s cubic-bezier(0.28, 0.11, 0.32, 1);
+            white-space: nowrap;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ================================================================
+           🔋 حالة الـ Loading للأزرار
+           ================================================================ */
+        .btn-loading {
+            position: relative;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 18px;
+            height: 18px;
+            margin-left: -9px;
+            margin-top: -9px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ================================================================
+           🎛️ عداد النتائج في الوظائف
+           ================================================================ */
+        .jobs-results-count {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .jobs-results-count strong {
+            color: var(--text-main);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- ==============================================================
+         📊 شريط التقدم في التمرير
+         يوسف: هاي الـ div ما فيها محتوى — الـ JS يتحكم بعرضها
+         ============================================================== -->
+    <div id="scroll-progress-bar"></div>
+
+    <!-- ==============================================================
+         🧭 القائمة العلوية
+         ============================================================== -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">مستقبل.</a>
+
+            <div class="nav-links">
+                <a href="#services">خدماتنا</a>
+                <a href="#process">طريقة شغلنا</a>
+                <a href="#jobs">الوظايف</a>
+                <a href="#team">الفريق</a>
+                <a href="#faq">مساعدة</a>
+            </div>
+
+            <div class="nav-actions">
+                <!-- زر تبديل الوضع الليلي -->
+                <button class="theme-toggle" onclick="toggleTheme()" aria-label="تبديل الوضع الليلي">
+                    <!-- أيقونة القمر — تظهر بالنهار -->
+                    <svg class="icon-moon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/>
+                    </svg>
+                    <!-- أيقونة الشمس — تظهر بالليل -->
+                    <svg class="icon-sun" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" fill="none"/>
+                        <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+
+                <button class="btn-auth btn-login" onclick="openModal('loginModal')">دخول</button>
+                <button class="btn-auth btn-signup" onclick="openModal('registerModal')">إنشاء حساب</button>
+            </div>
+
+            <!-- زر الموبايل -->
+            <button class="mobile-toggle" onclick="toggleMobileNav()" aria-label="القائمة">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- قائمة الموبايل المنسدلة -->
+    <div class="mobile-nav" id="mobileNav">
+        <a href="#services" onclick="closeMobileNav()">خدماتنا</a>
+        <a href="#process" onclick="closeMobileNav()">طريقة شغلنا</a>
+        <a href="#jobs" onclick="closeMobileNav()">الوظايف</a>
+        <a href="#team" onclick="closeMobileNav()">الفريق</a>
+        <a href="#faq" onclick="closeMobileNav()">مساعدة</a>
+        <div class="mobile-btns">
+            <button class="btn-auth btn-login" onclick="openModal('loginModal'); closeMobileNav();" style="width:100%">دخول</button>
+            <button class="btn-auth btn-signup" onclick="openModal('registerModal'); closeMobileNav();" style="width:100%">إنشاء حساب</button>
+        </div>
+    </div>
+
+    <!-- ==============================================================
+         🦸 قسم البطل الرئيسي
+         ============================================================== -->
+    <section class="hero" id="hero">
+        <div class="hero-eyebrow">
+            <div class="hero-eyebrow-dot"></div>
+            نحن نوظف الحين — شوف الفرص المتاحة
+        </div>
+
+        <h1>ابنِ المستقبل<br><em>معنا.</em></h1>
+
+        <p class="hero-subtitle">
+            ما نصمم واجهات بس — نصنع تجارب تغير طريقة الناس تتعامل مع التكنولوجيا.
+        </p>
+
+        <div class="hero-cta-group">
+            <a href="#jobs" class="btn-primary">
+                شوف الوظايف المتاحة
+                <!-- سهم SVG بدل الأيكون المستورد -->
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                </svg>
+            </a>
+            <a href="#process" class="btn-ghost">
+                كيف نشتغل؟
+            </a>
+        </div>
+
+        <div class="hero-img-box">
+            <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="بيئة العمل في مستقبل">
+        </div>
+    </section>
+
+    <!-- ==============================================================
+         📈 قسم الإحصائيات
+         يوسف: الأرقام تتحرك تلقائي بكلما تظهر بالشاشة
+         ============================================================== -->
+    <section class="stats-section scroll-reveal" id="stats">
+        <div class="stat-item">
+            <span class="stat-number" data-target="500">0</span>
+            <span class="stat-label">مبدع تقني</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number" data-target="12">0</span>
+            <span class="stat-label">مكتب حول العالم</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number" data-target="40">0</span>
+            <span class="stat-label">جنسية مختلفة</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number" data-target="10">0</span>
+            <span class="stat-label">مليون مستخدم يومي</span>
+        </div>
+    </section>
+
+    <!-- ==============================================================
+         🛠️ قسم الخدمات
+         ============================================================== -->
+    <section class="services-section" id="services">
+        <div class="section-header scroll-reveal">
+            <h2>شنو نقدر نسوي؟</h2>
+            <p>من الفكرة للمنتج الكامل — نحن شريكك التقني بكل مرحلة.</p>
+        </div>
+
+        <div class="services-grid">
+
+            <!-- خدمة 1: تطوير الواجهات -->
+            <div class="service-card scroll-reveal">
+                <div class="service-icon">
+                    <!-- أيقونة الواجهات — Monitor SVG -->
+                    <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2"/>
+                        <polyline points="8 21 12 17 16 21"/>
+                        <line x1="12" y1="17" x2="12" y2="21"/>
+                    </svg>
+                </div>
+                <h3>تطوير الواجهات الأمامية</h3>
+                <p>
+                    نبني واجهات سريعة ونظيفة بأحدث تقنيات الويب. من التصميم للكود، كل تفصيلة مدروسة.
+                    نشتغل بـ React و Vue وغيرهم حسب احتياجك.
+                </p>
+                <div class="service-tags">
+                    <span class="tag">React</span>
+                    <span class="tag">Vue.js</span>
+                    <span class="tag">TypeScript</span>
+                    <span class="tag">Tailwind</span>
+                </div>
+            </div>
+
+            <!-- خدمة 2: تصميم UX -->
+            <div class="service-card scroll-reveal">
+                <div class="service-icon">
+                    <!-- أيقونة القلم — Pen Tool SVG -->
+                    <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+                        <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+                        <path d="M2 2l7.586 7.586"/>
+                        <circle cx="11" cy="11" r="2"/>
+                    </svg>
+                </div>
+                <h3>تصميم تجربة المستخدم</h3>
+                <p>
+                    نحول المشاكل المعقدة لتجارب بسيطة وجميلة. نبدأ من البحث والـ Wireframe وننتهي
+                    بـ Prototype جاهز للتطوير.
+                </p>
+                <div class="service-tags">
+                    <span class="tag">Figma</span>
+                    <span class="tag">UX Research</span>
+                    <span class="tag">Prototyping</span>
+                    <span class="tag">Design System</span>
+                </div>
+            </div>
+
+            <!-- خدمة 3: البنية التحتية -->
+            <div class="service-card scroll-reveal">
+                <div class="service-icon">
+                    <!-- أيقونة السحابة — Cloud SVG -->
+                    <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                    </svg>
+                </div>
+                <h3>بنية سحابية متكاملة</h3>
+                <p>
+                    نصمم ونبني البنية التحتية اللي تشيل ملايين المستخدمين بدون ما يحس أحد بتأخير.
+                    AWS، GCP، Azure — عندنا خبرة بكلهم.
+                </p>
+                <div class="service-tags">
+                    <span class="tag">AWS</span>
+                    <span class="tag">Kubernetes</span>
+                    <span class="tag">Docker</span>
+                    <span class="tag">CI/CD</span>
+                </div>
+            </div>
+
+            <!-- خدمة 4: الذكاء الاصطناعي -->
+            <div class="service-card scroll-reveal">
+                <div class="service-icon">
+                    <!-- أيقونة الذكاء الاصطناعي — Cpu SVG -->
+                    <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4" y="4" width="16" height="16" rx="2"/>
+                        <rect x="9" y="9" width="6" height="6"/>
+                        <line x1="9" y1="1" x2="9" y2="4"/>
+                        <line x1="15" y1="1" x2="15" y2="4"/>
+                        <line x1="9" y1="20" x2="9" y2="23"/>
+                        <line x1="15" y1="20" x2="15" y2="23"/>
+                        <line x1="20" y1="9" x2="23" y2="9"/>
+                        <line x1="20" y1="14" x2="23" y2="14"/>
+                        <line x1="1" y1="9" x2="4" y2="9"/>
+                        <line x1="1" y1="14" x2="4" y2="14"/>
+                    </svg>
+                </div>
+                <h3>حلول الذكاء الاصطناعي</h3>
+                <p>
+                    ندمج الـ AI بمنتجاتك بطريقة ذكية. من معالجة اللغة العربية لنماذج التوصية
+                    والتحليل التنبؤي — عندنا الخبرة.
+                </p>
+                <div class="service-tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">LLMs</span>
+                    <span class="tag">ML Pipeline</span>
+                    <span class="tag">NLP عربي</span>
+                </div>
+            </div>
+
+            <!-- خدمة 5: الأمن السيبراني -->
+            <div class="service-card scroll-reveal">
+                <div class="service-icon">
+                    <!-- أيقونة الدرع — Shield SVG -->
+                    <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                <h3>أمن سيبراني متكامل</h3>
+                <p>
+                    نحمي بياناتك وبيانات مستخدميك بأفضل معايير الأمن العالمية. Penetration Testing،
+                    مراجعة الكود، وأنظمة الكشف عن التهديدات.
+                </p>
+                <div class="service-tags">
+                    <span class="tag">Pen Testing</span>
+                    <span class="tag">OWASP</span>
+                    <span class="tag">Zero Trust</span>
+                    <span class="tag">SIEM</span>
+                </div>
+            </div>
+
+            <!-- خدمة 6: تحليل البيانات -->
+            <div class="service-card scroll-reveal">
+                <div class="service-icon">
+                    <!-- أيقونة البيانات — Bar Chart SVG -->
+                    <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"/>
+                        <line x1="12" y1="20" x2="12" y2="4"/>
+                        <line x1="6" y1="20" x2="6" y2="14"/>
+                        <line x1="2" y1="20" x2="22" y2="20"/>
+                    </svg>
+                </div>
+                <h3>تحليل البيانات والذكاء التجاري</h3>
+                <p>
+                    نحول أرقامك الخام لقرارات ذكية. نبني Dashboards تفاعلية وتقارير تساعد
+                    إدارتك تفهم ما يصير بالسوق.
+                </p>
+                <div class="service-tags">
+                    <span class="tag">Power BI</span>
+                    <span class="tag">Tableau</span>
+                    <span class="tag">BigQuery</span>
+                    <span class="tag">Spark</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ==============================================================
+         🗺️ قسم طريقة العمل
+         يوسف: هاي الـ Timeline — كل خطوة موصولة بالثانية بخط عمودي
+         ============================================================== -->
+    <section class="process-section" id="process">
+        <div class="section-header scroll-reveal">
+            <h2>كيف نشتغل؟</h2>
+            <p>عملية واضحة ومجربة — من أول يوم لتسليم المنتج.</p>
+        </div>
+
+        <div class="process-timeline">
+
+            <!-- خطوة 1 -->
+            <div class="process-step scroll-reveal">
+                <div class="process-step-content">
+                    <div class="process-step-icon">
+                        <!-- أيقونة المحادثة -->
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </div>
+                    <h3>01 — الاكتشاف والفهم</h3>
+                    <p>
+                        نبدأ بجلسة عميقة نفهم فيها مشروعك، جمهورك، وأهدافك التجارية.
+                        نسأل الأسئلة الصعبة اللي غيرنا ما يسألها — لأن الفهم الصح هو نص الحل.
+                        هاي المرحلة تاخذ من يوم لأسبوع حسب تعقيد المشروع.
+                    </p>
+                </div>
+                <div class="process-step-num">١</div>
+                <div style="flex:1;"></div>
+            </div>
+
+            <!-- خطوة 2 -->
+            <div class="process-step scroll-reveal">
+                <div style="flex:1;"></div>
+                <div class="process-step-num">٢</div>
+                <div class="process-step-content">
+                    <div class="process-step-icon">
+                        <!-- أيقونة الخارطة -->
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/>
+                            <line x1="9" y1="3" x2="9" y2="18"/>
+                            <line x1="15" y1="6" x2="15" y2="21"/>
+                        </svg>
+                    </div>
+                    <h3>02 — التخطيط والاستراتيجية</h3>
+                    <p>
+                        بعد الفهم، نرسم خارطة طريق واضحة: المراحل، الأولويات، والـ Milestones.
+                        نختار الـ Tech Stack المناسب لمشروعك — مو بس الأحدث، لكن الأنسب.
+                        نحدد الفريق المطلوب ونبدأ بالتحضير.
+                    </p>
+                </div>
+            </div>
+
+            <!-- خطوة 3 -->
+            <div class="process-step scroll-reveal">
+                <div class="process-step-content">
+                    <div class="process-step-icon">
+                        <!-- أيقونة التصميم -->
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+                            <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+                            <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
+                            <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
+                            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+                        </svg>
+                    </div>
+                    <h3>03 — التصميم والـ Prototyping</h3>
+                    <p>
+                        فريق التصميم عندنا ما يصمم بس — يفكر تجربة. نبني Wireframes أولاً،
+                        نختبرها مع مستخدمين حقيقيين، ثم نطور التصميم النهائي بتفاصيل دقيقة.
+                        ما نبدأ بالتطوير قبل ما تكون راضي ١٠٠٪.
+                    </p>
+                </div>
+                <div class="process-step-num">٣</div>
+                <div style="flex:1;"></div>
+            </div>
+
+            <!-- خطوة 4 -->
+            <div class="process-step scroll-reveal">
+                <div style="flex:1;"></div>
+                <div class="process-step-num">٤</div>
+                <div class="process-step-content">
+                    <div class="process-step-icon">
+                        <!-- أيقونة الكود -->
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16 18 22 12 16 6"/>
+                            <polyline points="8 6 2 12 8 18"/>
+                        </svg>
+                    </div>
+                    <h3>04 — التطوير والبناء</h3>
+                    <p>
+                        هنا يبدأ السحر الحقيقي. مهندسينا يبنون بكود نظيف وموثق، مع Code Reviews
+                        يومية وتسليمات أسبوعية تشوفها وتعطينا ملاحظاتك. نشتغل بـ Agile — بس
+                        بشكل عراقي واضح ومباشر.
+                    </p>
+                </div>
+            </div>
+
+            <!-- خطوة 5 -->
+            <div class="process-step scroll-reveal">
+                <div class="process-step-content">
+                    <div class="process-step-icon">
+                        <!-- أيقونة الاختبار -->
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </div>
+                    <h3>05 — الاختبار والجودة</h3>
+                    <p>
+                        ما نسلم شي ما اختبرناه ألف مرة. Unit Tests، Integration Tests،
+                        واختبارات المستخدمين الحقيقيين. نضمن إن المنتج يشتغل على كل
+                        جهاز وكل browser قبل ما يوصلك.
+                    </p>
+                </div>
+                <div class="process-step-num">٥</div>
+                <div style="flex:1;"></div>
+            </div>
+
+            <!-- خطوة 6 -->
+            <div class="process-step scroll-reveal">
+                <div style="flex:1;"></div>
+                <div class="process-step-num">٦</div>
+                <div class="process-step-content">
+                    <div class="process-step-icon">
+                        <!-- أيقونة الإطلاق -->
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 2L11 13"/>
+                            <path d="M22 2L15 22 11 13 2 9l20-7z"/>
+                        </svg>
+                    </div>
+                    <h3>06 — الإطلاق والدعم</h3>
+                    <p>
+                        نطلق المنتج مع دعم كامل لأول ٣ أشهر. نراقب الأداء، نحل أي مشاكل فورياً،
+                        ونقدم تقارير أسبوعية عن حالة المنتج. بعدها تقدر تختار خطة الدعم المستمر.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ==============================================================
+         🔍 قسم الوظائف مع البحث والفلترة
+         ============================================================== -->
+    <section class="departments" id="jobs">
+        <div class="section-header scroll-reveal">
+            <h2>الوظايف المتاحة</h2>
+            <p>ابحث عن الوظيفة اللي تناسب طموحاتك وابدأ رحلتك الحين.</p>
+        </div>
+
+        <!-- شريط البحث -->
+        <div class="jobs-search-bar scroll-reveal">
+            <div class="jobs-search-icon">
+                <!-- أيقونة البحث -->
+                <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+            </div>
+            <input
+                type="text"
+                id="jobSearchInput"
+                placeholder="ابحث عن وظيفة، مهارة، أو موقع..."
+                oninput="filterJobs()"
+            />
+        </div>
+
+        <!-- أزرار الفلترة -->
+        <div class="jobs-filters scroll-reveal">
+            <button class="filter-btn active" data-filter="all" onclick="setFilter(this, 'all')">الكل</button>
+            <button class="filter-btn" data-filter="remote" onclick="setFilter(this, 'remote')">عن بعد</button>
+            <button class="filter-btn" data-filter="onsite" onclick="setFilter(this, 'onsite')">حضوري</button>
+            <button class="filter-btn" data-filter="hybrid" onclick="setFilter(this, 'hybrid')">هجين</button>
+        </div>
+
+        <!-- عداد النتائج -->
+        <div class="jobs-results-count" id="jobsCount"></div>
+
+        <!-- التبويب حسب القسم -->
+        <div class="tab-nav scroll-reveal">
+            <div class="tab-link active" onclick="switchTab(event, 'engineering')">الهندسة</div>
+            <div class="tab-link" onclick="switchTab(event, 'design')">التصميم</div>
+            <div class="tab-link" onclick="switchTab(event, 'product')">المنتج</div>
+            <div class="tab-link" onclick="switchTab(event, 'data')">البيانات</div>
+            <div class="tab-link" onclick="switchTab(event, 'security')">الأمن</div>
+        </div>
+
+        <!-- رسالة "لا نتائج" -->
+        <div class="no-results" id="noResults">
+            <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                <line x1="8" y1="11" x2="14" y2="11"/>
+            </svg>
+            <h3>ما لقينا نتايج</h3>
+            <p>حاول تغير كلمة البحث أو الفلتر</p>
+        </div>
+
+        <!-- ======================
+             قسم الهندسة
+             ====================== -->
+        <div id="engineering" class="tab-pane active">
+
+            <div class="job-card scroll-reveal"
+                 data-title="مهندس واجهات أمامية"
+                 data-location="بغداد، العراق"
+                 data-type="hybrid"
+                 data-skills="react typescript css javascript">
+                <div class="job-card-top">
+                    <span class="job-badge badge-hybrid">هجين</span>
+                    <h3>مهندس واجهات أمامية (Senior)</h3>
+                    <p>تقود فريق تطوير الواجهات وتبني أنظمة تصميم قابلة للتوسع باستخدام React وTypeScript. المطلوب منك أكثر من كود — تحتاج تفكير منتج حقيقي.</p>
+                </div>
+                <div class="job-meta">
+                    <div class="job-location">
+                        <!-- أيقونة الموقع -->
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        بغداد، العراق (هجين)
+                    </div>
+                    <a href="#" class="btn-apply-small" onclick="openApplyModal('مهندس واجهات أمامية (Senior)'); return false;">قدّم الحين</a>
+                </div>
+            </div>
+
+            <div class="job-card scroll-reveal"
+                 data-title="مهندس بيك إند"
+                 data-location="دبي، الإمارات"
+                 data-type="onsite"
+                 data-skills="nodejs python api database postgresql">
+                <div class="job-card-top">
+                    <span class="job-badge badge-onsite">حضوري</span>
+                    <h3>مهندس بيك إند — Node.js</h3>
+                    <p>تبني الـ APIs اللي تشيل ملايين الطلبات يومياً. نحتاج شخص يفهم الـ Performance ويحب يحل مشاكل معقدة بحلول بسيطة وذكية.</p>
+                </div>
+                <div class="job-meta">
+                    <div class="job-location">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        دبي، الإمارات
+                    </div>
+                    <a href="#" class="btn-apply-small" onclick="openApplyModal('مهندس بيك إند — Node.js'); return false;">قدّم الحين</a>
+                </div>
+            </div>
+
+            <div class="job-card scroll-reveal"
+                 data-title="مهندس موبايل"
+                 data-location="عن بعد"
+                 data-type="remote"
+                 data-skills="react native flutter ios android mobile">
+                <div class="job-card-top">
+                    <span class="job-badge badge-remote">عن بعد</span>
+                    <h3>مهندس تطبيقات موبايل</h3>
+                    <p>تطور تطبيقات iOS و Android بـ React Native. نريد شخص يهتم بالـ Performance والتجربة بنفس الوقت — مو بس شخص يكتب كود يشتغل.</p>
+                </div>
+                <div class="job-meta">
+                    <div class="job-location">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        عن بعد كامل
+                    </div>
+                    <a href="#" class="btn-apply-small" onclick="openApplyModal('مهندس تطبيقات موبايل'); return false;">قدّم الحين</a>
+                </div>
+            </div>
+
+            <div class="job-card scroll-reveal"
+                 data-title="مهندس ديفوبس"
+                 data-location="الرياض، السعودية"
+                 data-type="hybrid"
+                 data-skills="devops kubernetes docker aws cicd terraform">
+                <div class="job-card-top">
+                    <span class="job-badge badge-hybrid">هجين</span>
+                    <h3>مهندس DevOps — Infrastructure</h3>
+                    <p>تدير وتطور بنيتنا التحتية السحابية وتضمن إن كل شي يشتغل بـ 99.99% uptime. هاي المسؤولية تبي شخص يستيقظ ليلاً بس يحب شغله.</p>
+                </div>
+                <div class="job-meta">
+                    <div class="job-location">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        الرياض، السعودية
+                    </div>
+                    <a href="#" class="btn-apply-small" onclick="openApplyModal('مهندس DevOps'); return false;">قدّم الحين</a>
+                </div>
+            </div>
+
+            <div class="job-card scroll-reveal"
+                 data-title="مهندس بيانات ضخمة"
+                 data-location="القاهرة، مصر"
+                 data-type="onsite"
+                 data-skills="python spark hadoop bigdata sql etl pipeline">
+                <div class="job-card-top">
+                    <span class="job-badge badge-onsite">حضوري</span>
+                    <h3>مهندس بيانات ضخمة</h3>
+                    <p>تبني Pipelines تعالج مئات الملايين من السجلات يومياً. نشتغل بـ Spark و BigQuery وكل أدوات الـ Big Data الحديثة.</p>
+                </div>
+                <div class="job-meta">
+                    <div class="job-location">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        القاهرة، مصر
+                    </div>
+                    <a href="#" class="btn-apply-small" onclick="openApplyModal('مهندس بيانات ضخمة'); return false;">قدّم الحين</a>
+                </div>
+            </div>
+
+            <div class="job-card scroll-reveal"
+                 data-title="مطور ذكاء اصطناعي"
+                 data-location="عن بعد"
+                 data-type="remote"
+                 data-skills="python ai ml machinelearning llm nlp pytorch tensorflow">
+                <div class="job-card-top">
+                    <span class="job-badge badge-remote">عن بعد</span>
+                    <h3>مطور ذكاء اصطناعي — LLMs</h3>
+                    <p>تطور وتضبط نماذج لغوية كبيرة للمحتوى العربي. نحتاج شخص يفهم بـ Fine-tuning والـ Prompt Engineering ويحب يجرب أشياء جديدة.</p>
+                </div>
+                <div class="job-meta">
+                    <div class="job-location">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        عن بعد كامل
+                    </div>
+                    <a href="#" class="btn-apply-small" onclick="openApplyModal('مطور ذكاء اصطناعي — LLMs'); return false;">قدّم الحين</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ======================
+             قسم التصميم
+             ====================== -->
+        <div id="design" class="tab-pane">
+
+            <div class="job-card scroll-reveal"
+                 data-title="مصمم UX أول"
+                 data-location="بغداد، العراق"
+                 data-type="hybrid"
+                 data-skills="ux design figma wireframe research prototyping">
+                <div class="job-card-top">
+                    <span class="job-badge badge-hybrid">هجين</span>
+                    <h3>مصمم تجربة مستخدم — Lead UX</h3>
+                    <p>تقود فريق التصميم وتحدد الـ Design Language للمنتجات. تحتاج تجربة عميقة مع المستخدمين العرب وفهم ثقافي قوي.</p>
+                </div>
+                <div class="job-meta">
+                    <div class="job-location">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        بغداد، العراق
+                    </div>
+                    <a href="#" class="btn-apply-small" onclick="openApplyModal('مصمم تجربة مستخدم — Lead UX'); return false;">قدّم الحين</a>
+                </div>
+            </div>
+
+            <div class="job-card scroll-reveal"
+                 data-title="مصمم motion"
+                 data-location="عن بعد"
+                 data-type="remote"
+                 data-skills="motion design animation after effects lottie figma">
+                <div class="job-card-top">
+                    <span class="job-badge badge-remote">عن بعد</span>
+                    <h3>مصمم Motion Graphics</h3>
+                    <p>تضيف الروح للمنتج بالتحريك الذكي. شغلنا يحتاج أنيميشن ما يشتت — يوضح ويبسط. Lottie و After Effects جزء من يومياتك.</p>
+                </div>
+                <div class="job-meta">
+                    <div class="job-location">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        عن بعد كامل
+                    </div>
+                    <a href="#" class="btn-apply-small" onclick="openApplyModal('مصمم Motion Graphics'); return false;">قدّم الحين</a>
+                </div>
+            </div>
+
+            <div class="job-card scroll-reveal"
+                 data-title="مصمم نظام تصميم"
+                 data-location="دبي، الإمارات"
+                 data-type="onsite"
+                 data-skills="design system component library tokens figma storybook">
+                <div class="job-card-top">
+                    <span class="job-badge badge-onsite">حضوري</span>
+                    <h3>مصمم نظام تصميم (Design Systems)</h3>
+                    <p>تبني وتطور الـ Component Library اللي يستخدمها كل فرق التصميم والتطوير. دورك يربط عالم التصميم بالتطوير.</p>
+                </div>
+                <div class="job-meta">
+                    <div class="job-location">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        دبي، الإمارات
+                    </div>
+                    <a href="#" class="btn-apply-small" onclick="openApplyModal('مصمم Design Systems'); return false;">قدّم الحين</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ======================
+             قسم المنتج
+             ====================== -->
+        <div id="product" class="tab-pane">
+
+            <div class="job-card scroll-reveal"
+                 data-title="مدير منتج"
+                 data-location="بغداد، العراق"
+                 data-type="hybrid"
+                 data-skills="product management roadmap agile scrum analytics">
+                <div class="job-card-top">
+                    <span class="job-badge badge-hybrid">هجين</span>
+                    <h3>مدير منتج أول (Senior PM)</h3>
+                    <p>تمتلك منتجاً كاملاً من الرؤية للتسليم. تشتغل مع الهندسة والتصميم والأعمال في نفس الوقت وتحول الأهداف لـ Features تخدم المستخدمين فعلاً.</p>
+                </div>
+                <div class="job-meta">
+                    <div class="job-location">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        بغداد، العراق
+                    </div>
+                    <a href="#" class="btn-apply-small" onclick="openApplyModal('مدير منتج أول'); return false;">قدّم الحين</a>
+                </div>
+            </div>
+
+            <div class="job-card scroll-reveal"
+                 data-title="محلل منتج"
+                 data-location="عن بعد"
+                 data-type="remote"
+                 data-skills="product analyst data analytics sql mixpanel amplitude user research">
+                <div class="job-card-top">
+                    <span class="job-badge badge-remote">عن بعد</span>
+                    <h3>محلل منتج (Product Analyst)</h3>
+                    <p>تحول البيانات الخام لقرارات تحسن المنتج. تشتغل بقرب من مدراء المنتج وتبني الـ Dashboards اللي تساعدهم يفهمون سلوك المستخدمين.</p>
+                </div>
+                <div class="job-meta">
+                    <div class="job-location">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        عن بعد كامل
+                    </div>
+                    <a href="#" class="btn-apply-small" onclick="openApplyModal('محلل منتج'); return false;">قدّم الحين</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ======================
+             قسم البيانات
+             ====================== -->
+        <div id="data" class="tab-pane">
+
+            <div class="job-card scroll-reveal"
+                 data-title="عالم بيانات"
+                 data-location="القاهرة، مصر"
+                 data-type="onsite"
+                 data-skills="data science python machine learning statistics r pandas scikit">
+                <div class="job-card-top">
+                    <span class="job-badge badge-onsite">حضوري</span>
+                    <h3>عالم بيانات (Data Scientist)</h3>
+                    <p>تبني نماذج تنبؤية تساعد ملايين المستخدمين يحصلون على تجربة مخصصة. تحتاج خلفية قوية بالإحصاء والـ ML مع فهم تجاري.</p>
+                </div>
+                <div class="job-meta">
+                    <div class="job-location">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        القاهرة، مصر
+                    </div>
+                    <a href="#" class="btn-apply-small" onclick="openApplyModal('عالم بيانات'); return false;">قدّم الحين</a>
+                </div>
+            </div>
+
+            <div class="job-card scroll-reveal"
+                 data-title="مهندس بيانات"
+                 data-location="بغداد، العراق"
+                 data-type="hybrid"
+                 data-skills="data engineer etl pipeline sql python airflow dbt warehouse">
+                <div class="job-card-top">
+                    <span class="job-badge badge-hybrid">هجين</span>
+                    <h3>مهندس بيانات (Data Engineer)</h3>
+                    <p>تبني وتصمم الـ Data Pipelines اللي تغذي كل فرق التحليل والذكاء الاصطناعي. شغل الخلف اللي ما يشوفه أحد لكن كل شي يعتمد عليه.</p>
+                </div>
+                <div class="job-meta">
+                    <div class="job-location">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        بغداد، العراق
+                    </div>
+                    <a href="#" class="btn-apply-small" onclick="openApplyModal('مهندس بيانات'); return false;">قدّم الحين</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ======================
+             قسم الأمن
+             ====================== -->
+        <div id="security" class="tab-pane">
+
+            <div class="job-card scroll-reveal"
+                 data-title="مهندس أمن سيبراني"
+                 data-location="الرياض، السعودية"
+                 data-type="onsite"
+                 data-skills="cybersecurity penetration testing owasp security audit siem soc">
+                <div class="job-card-top">
+                    <span class="job-badge badge-onsite">حضوري</span>
+                    <h3>مهندس أمن سيبراني (Senior)</h3>
+                    <p>تحمي منصاتنا من هجمات تتطور كل يوم. تشتغل بـ Red Team أحياناً وBlue Team أحياناً ثانية — وتحب التفكير زي المهاجم قبل ما يهاجم.</p>
+                </div>
+                <div class="job-meta">
+                    <div class="job-location">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        الرياض، السعودية
+                    </div>
+                    <a href="#" class="btn-apply-small" onclick="openApplyModal('مهندس أمن سيبراني'); return false;">قدّم الحين</a>
+                </div>
+            </div>
+
+            <div class="job-card scroll-reveal"
+                 data-title="محلل أمن"
+                 data-location="عن بعد"
+                 data-type="remote"
+                 data-skills="security analyst soc monitoring threat intelligence incident response">
+                <div class="job-card-top">
+                    <span class="job-badge badge-remote">عن بعد</span>
+                    <h3>محلل أمن — SOC Analyst</h3>
+                    <p>تراقب شبكاتنا على مدار الساعة وتكتشف التهديدات قبل ما تصير مشاكل. دورك الأول والأخير هو حماية مستخدمينا.</p>
+                </div>
+                <div class="job-meta">
+                    <div class="job-location">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        عن بعد كامل
+                    </div>
+                    <a href="#" class="btn-apply-small" onclick="openApplyModal('محلل أمن SOC'); return false;">قدّم الحين</a>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==============================================================
+         📸 معرض الصور
+         ============================================================== -->
+    <section class="gallery-section scroll-reveal" id="gallery">
+        <div class="section-header">
+            <h2>الحياة في "مستقبل"</h2>
+            <p>بيئة تحفز الإبداع وتدعم التطور — لأن اللي يشتغل معنا يستاهل الأحسن.</p>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80" alt="تعاون الفريق">
+                <div class="gallery-item-label">جلسات التعاون</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=700&q=80" alt="العمل التقني">
+                <div class="gallery-item-label">التطوير التقني</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=700&q=80" alt="الاجتماعات">
+                <div class="gallery-item-label">جلسات الاستراتيجية</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================================
+         👥 قسم الفريق
+         ============================================================== -->
+    <section class="team-section scroll-reveal" id="team">
+        <div class="section-header">
+            <h2>تعرف على الفريق</h2>
+            <p>ناس من خلفيات مختلفة، هدف واحد — نبني تقنية تفرق.</p>
+        </div>
+
+        <div class="team-grid">
+
+            <div class="team-card scroll-reveal">
+                <div class="team-photo">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80" alt="كريم الجبوري">
+                </div>
+                <h4>م. كريم الجبوري</h4>
+                <span>المؤسس والرئيس التنفيذي</span>
+                <div class="team-socials">
+                    <a href="#" aria-label="تويتر">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="لينكدإن">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/>
+                            <rect x="2" y="9" width="4" height="12"/>
+                            <circle cx="4" cy="4" r="2"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="team-card scroll-reveal">
+                <div class="team-photo">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80" alt="سارة العبيدي">
+                </div>
+                <h4>م. سارة العبيدي</h4>
+                <span>مديرة التصميم</span>
+                <div class="team-socials">
+                    <a href="#" aria-label="تويتر">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="لينكدإن">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/>
+                            <rect x="2" y="9" width="4" height="12"/>
+                            <circle cx="4" cy="4" r="2"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="team-card scroll-reveal">
+                <div class="team-photo">
+                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80" alt="أحمد الموسوي">
+                </div>
+                <h4>م. أحمد الموسوي</h4>
+                <span>مدير الهندسة</span>
+                <div class="team-socials">
+                    <a href="#" aria-label="غيثاب">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="لينكدإن">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/>
+                            <rect x="2" y="9" width="4" height="12"/>
+                            <circle cx="4" cy="4" r="2"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="team-card scroll-reveal">
+                <div class="team-photo">
+                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80" alt="نور الهاشمي">
+                </div>
+                <h4>م. نور الهاشمي</h4>
+                <span>رئيسة المنتج</span>
+                <div class="team-socials">
+                    <a href="#" aria-label="تويتر">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="لينكدإن">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/>
+                            <rect x="2" y="9" width="4" height="12"/>
+                            <circle cx="4" cy="4" r="2"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ==============================================================
+         💬 قسم الشهادات — Infinite Scroll Track
+         ============================================================== -->
+    <section class="testimonials-section" id="testimonials">
+        <div class="section-header scroll-reveal">
+            <h2>ليش يحبون مستقبل؟</h2>
+            <p>ناس من فريقنا بالكلام — مو إعلان، هذا واقع.</p>
+        </div>
+
+        <div class="testimonials-track-wrapper">
+            <!-- نكرر البطاقات مرتين حتى يشتغل الـ infinite scroll بشكل سلس -->
+            <div class="testimonials-track">
+
+                <!-- البطاقة 1 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <blockquote>ثلاث سنين بمستقبل وكل يوم أشوف مشاريع تتحدى قدراتي. ما حسيت يوم إني وقفت بمكاني — دايماً في شي جديد أتعلمه.</blockquote>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="علي">
+                        </div>
+                        <div class="testimonial-author-info">
+                            <strong>علي حسن</strong>
+                            <span>مهندس بيك إند أول، بغداد</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- البطاقة 2 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <blockquote>كمصممة، ما توقعت أشوف شركة تعطي نفس الأولوية للتصميم مثل الكود. هنا التصميم مو زينة — هو جزء من القرار.</blockquote>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="رنا">
+                        </div>
+                        <div class="testimonial-author-info">
+                            <strong>رنا خالد</strong>
+                            <span>مصممة UX، دبي</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- البطاقة 3 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <blockquote>الراتب ممتاز — بس اللي يبقيني هو الناس. فريق من العراق والأردن ومصر وتونس، وكلنا نحكي نفس لغة: تعالَ نبني شي يفرق.</blockquote>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80" alt="محمد">
+                        </div>
+                        <div class="testimonial-author-info">
+                            <strong>محمد العمري</strong>
+                            <span>مهندس DevOps، عن بعد</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- البطاقة 4 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <blockquote>جيت خريج ما عندي خبرة، وبعد سنة بمستقبل تحولت لمهندس شايلة مسؤوليات حقيقية. البرنامج التدريبي هنا مو كلام فاضي.</blockquote>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=100&q=80" alt="يسرى">
+                        </div>
+                        <div class="testimonial-author-info">
+                            <strong>يسرى الشمري</strong>
+                            <span>مهندسة واجهات، الرياض</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- البطاقة 5 -->
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <blockquote>عملت بشركات كبيرة بالخليج — مستقبل هي الأولى اللي أحس فيها إن صوتي مسموع فعلاً. الأفكار تتحول لقرارات بسرعة.</blockquote>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=100&q=80" alt="طارق">
+                        </div>
+                        <div class="testimonial-author-info">
+                            <strong>طارق البصري</strong>
+                            <span>مدير منتج، القاهرة</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- نكرر نفس البطاقات للـ infinite loop -->
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <blockquote>ثلاث سنين بمستقبل وكل يوم أشوف مشاريع تتحدى قدراتي. ما حسيت يوم إني وقفت بمكاني — دايماً في شي جديد أتعلمه.</blockquote>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="علي">
+                        </div>
+                        <div class="testimonial-author-info">
+                            <strong>علي حسن</strong>
+                            <span>مهندس بيك إند أول، بغداد</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <blockquote>كمصممة، ما توقعت أشوف شركة تعطي نفس الأولوية للتصميم مثل الكود. هنا التصميم مو زينة — هو جزء من القرار.</blockquote>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="رنا">
+                        </div>
+                        <div class="testimonial-author-info">
+                            <strong>رنا خالد</strong>
+                            <span>مصممة UX، دبي</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <blockquote>الراتب ممتاز — بس اللي يبقيني هو الناس. فريق من العراق والأردن ومصر وتونس، وكلنا نحكي نفس لغة: تعالَ نبني شي يفرق.</blockquote>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80" alt="محمد">
+                        </div>
+                        <div class="testimonial-author-info">
+                            <strong>محمد العمري</strong>
+                            <span>مهندس DevOps، عن بعد</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================================
+         ❓ قسم الأسئلة الشائعة
+         ============================================================== -->
+    <section class="faq-section scroll-reveal" id="faq">
+        <div class="faq-container">
+            <div class="section-header" style="margin-bottom:50px;">
+                <h2>أسئلة شايلة ببالك؟</h2>
+                <p>نجاوب كل سؤال تقدر تسأله — وإذا ما لقيت جوابك، تواصل معنا مباشرة.</p>
+            </div>
+
+            <!-- سؤال 1 -->
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>هل توفرون خيار العمل عن بعد بالكامل؟</span>
+                    <div class="accordion-icon">
+                        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    آه، وبشكل واسع. الكثير من وظايفنا متاحة عن بعد بالكامل، وخصوصاً وظايف الهندسة والتصميم. الوظايف اللي تحتاج حضور هي بالغالب الوظايف القيادية أو اللي تتطلب تعاون مباشر مع الزبائن. كل وظيفة مكتوب عليها نوعها بوضوح — عن بعد، حضوري، أو هجين.
+                </div>
+            </div>
+
+            <!-- سؤال 2 -->
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>شنو مراحل التوظيف عندكم؟</span>
+                    <div class="accordion-icon">
+                        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    عملية التوظيف عندنا واضحة وسريعة — ما نحب نضيع وقتك. المراحل: (١) مراجعة السيرة الذاتية وملف الأعمال، (٢) مقابلة تمهيدية ٣٠ دقيقة مع HR، (٣) تحدي تقني أو تصميمي تسوية من بيتك، (٤) مقابلة تقنية معمقة مع الفريق، (٥) مقابلة ثقافة وقيم مع أحد المديرين. كل المراحل تاخذ من أسبوعين لثلاثة أسابيع.
+                </div>
+            </div>
+
+            <!-- سؤال 3 -->
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>هل في برامج تدريب للخريجين الجدد؟</span>
+                    <div class="accordion-icon">
+                        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    بالتأكيد! برنامج "مستقبل كادر" يفتح كل صيف ويستهدف الخريجين الجدد والطلاب اللي بآخر سنة دراسية. البرنامج مدته ٦ أشهر، تشتغل فيها على مشاريع حقيقية مع Mentors من فريقنا. الأفضل منهم يحصلون على عروض توظيف دائم.
+                </div>
+            </div>
+
+            <!-- سؤال 4 -->
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>شنو المزايا والفوائد الوظيفية عندكم؟</span>
+                    <div class="accordion-icon">
+                        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    راتب تنافسي بالسوق + مكافآت سنوية. تأمين صحي شامل للموظف وعيلته. بدل تطوير مهني سنوي تصرفه على كورسات وكتب ومؤتمرات. إجازة مرنة — ما في عدد محدد، بالمسؤولية. معدات شغل ممتازة: Macbook Pro + شاشة + كرسي ارغونوميك للي يشتغل من البيت.
+                </div>
+            </div>
+
+            <!-- سؤال 5 -->
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>هل تقبلون المتقدمين من العراق مباشرة؟</span>
+                    <div class="accordion-icon">
+                        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    آه وبكل فخر. العراق سوق تقني ناضج وفيه كفاءات استثنائية — نحن نعرف هذا لأن جزء كبير من فريقنا عراقي. لما تتقدم من بغداد أو أي مدينة عراقية ثانية، سيرتك تاخذ نفس الأولوية بالضبط.
+                </div>
+            </div>
+
+            <!-- سؤال 6 -->
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>شنو اللغة الرسمية بالشركة؟</span>
+                    <div class="accordion-icon">
+                        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    العربية هي اللغة الأساسية للتواصل اليومي والاجتماعات — هذا شي نفخر فيه. التوثيق التقني والكود يكون بالإنجليزية لأنها لغة البرمجة العالمية. الإنجليزية مطلوبة بمستوى معقول، بس ما راح نحكم عليك بأسلوبها اللغوي.
+                </div>
+            </div>
+
+            <!-- سؤال 7 -->
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>كيف تتعاملون مع التطوير المهني والترقي؟</span>
+                    <div class="accordion-icon">
+                        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    كل موظف عنده خطة تطوير واضحة مع مديره المباشر. في مراجعات كل ٦ أشهر — مو سنة. الترقي عندنا مبني على الأثر والنتائج، مو على الأقدمية. الناس اللي تشتغل وتأثر بسرعة — ترتفع بسرعة.
+                </div>
+            </div>
+
+            <!-- سؤال 8 -->
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>هل تقبلون Freelancers أو عقود مؤقتة؟</span>
+                    <div class="accordion-icon">
+                        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    آه، عندنا برنامج للشركاء المستقلين للمشاريع القصيرة والمتخصصة. إذا كنت تبحث عن هذا النوع من التعاون، أرسل لنا على careers@mustaqbal.tech مع موضوع "شراكة مستقلة" وسنرد خلال ٤٨ ساعة.
+                </div>
+            </div>
+
+            <!-- سؤال 9 -->
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>كيف تضمنون ثقافة عمل صحية؟</span>
+                    <div class="accordion-icon">
+                        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    ساعات العمل ٤٠ ساعة أسبوعياً — ما نمجد الـ Burnout. عندنا سياسة واضحة: بعد ساعات العمل ما في توقع بالرد إلا في الطوارئ الحقيقية. كل موظف عنده يوم "شغل حر" شهري يشتغل فيه على شي يحبه — مشروع شخصي، تعلم، أو مجرد راحة.
+                </div>
+            </div>
+
+            <!-- سؤال 10 -->
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>كيف أعرف إذا تقدمي انوصل وانراجع؟</span>
+                    <div class="accordion-icon">
+                        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    بعد التقديم مباشرة تجيك رسالة تأكيد بالبريد الإلكتروني. خلال ٧ أيام عمل نراجع طلبك ونرد عليك سواء كان القرار إيجابياً أو لا. ما نترك أحد بدون رد — هذا وعدنا.
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ==============================================================
+         📬 قسم النشرة البريدية
+         ============================================================== -->
+    <section class="newsletter-section scroll-reveal">
+        <div class="newsletter-inner">
+            <div class="newsletter-icon">
+                <!-- أيقونة البريد -->
+                <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                </svg>
+            </div>
+            <h2>ما تفوّت وظيفة</h2>
+            <p>اشترك بنشرتنا واحصل على أول إشعار لما تنزل وظيفة تناسب تخصصك.</p>
+            <div class="newsletter-form">
+                <input type="email" id="newsletterEmail" placeholder="بريدك الإلكتروني" />
+                <button onclick="subscribeNewsletter()">اشترك</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================================
+         🦶 التذييل
+         ============================================================== -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="footer-logo">مستقبل.</span>
+                <p class="footer-desc">نحن هنا نضع معايير جديدة للتكنولوجيا والتصميم بالمنطقة العربية — وما راح نوقف.</p>
+                <div class="footer-social">
+                    <!-- تويتر -->
+                    <a href="#" aria-label="تويتر">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+                        </svg>
+                    </a>
+                    <!-- لينكدإن -->
+                    <a href="#" aria-label="لينكدإن">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/>
+                            <rect x="2" y="9" width="4" height="12"/>
+                            <circle cx="4" cy="4" r="2"/>
+                        </svg>
+                    </a>
+                    <!-- غيثاب -->
+                    <a href="#" aria-label="غيثاب">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/>
+                        </svg>
+                    </a>
+                    <!-- يوتيوب -->
+                    <a href="#" aria-label="يوتيوب">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/>
+                            <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-links-col">
+                <h4>الشركة</h4>
+                <a href="#">من نحن</a>
+                <a href="#">قصتنا</a>
+                <a href="#">الأخبار</a>
+                <a href="#">الاستدامة</a>
+                <a href="#">شركاؤنا</a>
+            </div>
+
+            <div class="footer-links-col">
+                <h4>الخدمات</h4>
+                <a href="#">تطوير الواجهات</a>
+                <a href="#">تصميم UX</a>
+                <a href="#">الذكاء الاصطناعي</a>
+                <a href="#">البنية السحابية</a>
+                <a href="#">الأمن السيبراني</a>
+            </div>
+
+            <div class="footer-links-col">
+                <h4>المجتمع</h4>
+                <a href="#">المدونة التقنية</a>
+                <a href="#">الفعاليات</a>
+                <a href="#">البودكاست</a>
+                <a href="#">النشرة البريدية</a>
+            </div>
+
+            <div class="footer-links-col">
+                <h4>قانوني</h4>
+                <a href="#">الخصوصية</a>
+                <a href="#">الشروط والأحكام</a>
+                <a href="#">سياسة الكوكيز</a>
+                <a href="#">إمكانية الوصول</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 شركة المستقبل للتقنية. جميع الحقوق محفوظة.</span>
+            <span>صنع بشغف — للعراقيين والعرب وكل مبدع بالعالم. 🖤</span>
+        </div>
+    </footer>
+
+    <!-- ==============================================================
+         🪟 مودال تسجيل الدخول
+         ============================================================== -->
+    <div class="modal-overlay" id="loginModal" onclick="handleOverlayClick(event, 'loginModal')">
+        <div class="modal-card">
+            <button class="close-modal" onclick="closeModal('loginModal')">×</button>
+            <h2 class="form-title">أهلاً وسهلاً</h2>
+            <p class="form-subtitle">سجل دخولك لمتابعة طلبات التوظيف الخاصة بك.</p>
+            <div id="loginFormBody">
+                <div class="input-group">
+                    <label>البريد الإلكتروني</label>
+                    <input type="email" id="loginEmail" placeholder="yusuf@example.com">
+                </div>
+                <div class="input-group">
+                    <label>كلمة المرور</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••">
+                </div>
+                <button class="btn-submit" onclick="handleLogin()">دخول</button>
+                <div class="divider-line"><span>أو</span></div>
+                <p style="text-align:center; font-size:14px; color:var(--text-secondary);">
+                    ما عندك حساب؟
+                    <a href="#" onclick="closeModal('loginModal'); openModal('registerModal')" style="color:var(--accent-blue); text-decoration:none; font-weight:600;">أنشئ حساب جديد</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==============================================================
+         🪟 مودال إنشاء الحساب
+         ============================================================== -->
+    <div class="modal-overlay" id="registerModal" onclick="handleOverlayClick(event, 'registerModal')">
+        <div class="modal-card">
+            <button class="close-modal" onclick="closeModal('registerModal')">×</button>
+            <h2 class="form-title">انضم للفريق</h2>
+            <p class="form-subtitle">أنشئ حسابك وابدأ رحلتك بمستقبل التقنية.</p>
+            <div id="registerFormBody">
+                <div class="input-group">
+                    <label>الاسم الكامل</label>
+                    <input type="text" id="regName" placeholder="يوسف محمد">
+                </div>
+                <div class="input-group">
+                    <label>البريد الإلكتروني</label>
+                    <input type="email" id="regEmail" placeholder="yusuf@example.com">
+                </div>
+                <div class="input-group">
+                    <label>تخصصك</label>
+                    <select id="regSpecialty">
+                        <option value="" disabled selected>اختر تخصصك</option>
+                        <option>هندسة الواجهات الأمامية</option>
+                        <option>هندسة البيك إند</option>
+                        <option>تصميم UX/UI</option>
+                        <option>علم البيانات</option>
+                        <option>الأمن السيبراني</option>
+                        <option>إدارة المنتج</option>
+                        <option>DevOps</option>
+                        <option>أخرى</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>كلمة المرور</label>
+                    <input type="password" id="regPassword" placeholder="٨ أحرف على الأقل">
+                </div>
+                <button class="btn-submit" onclick="handleRegister()">إنشاء حساب</button>
+                <div class="divider-line"><span>أو</span></div>
+                <p style="text-align:center; font-size:14px; color:var(--text-secondary);">
+                    عندك حساب؟
+                    <a href="#" onclick="closeModal('registerModal'); openModal('loginModal')" style="color:var(--accent-blue); text-decoration:none; font-weight:600;">سجل دخولك</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==============================================================
+         🪟 مودال التقديم على وظيفة
+         ============================================================== -->
+    <div class="modal-overlay" id="applyModal" onclick="handleOverlayClick(event, 'applyModal')">
+        <div class="modal-card">
+            <button class="close-modal" onclick="closeModal('applyModal')">×</button>
+
+            <!-- نموذج التقديم -->
+            <div id="applyFormBody">
+                <h2 class="form-title">قدّم الحين</h2>
+                <p class="form-subtitle" id="applyJobTitle">مهندس واجهات أمامية</p>
+
+                <div class="input-group">
+                    <label>الاسم الكامل</label>
+                    <input type="text" placeholder="يوسف محمد">
+                </div>
+                <div class="input-group">
+                    <label>البريد الإلكتروني</label>
+                    <input type="email" placeholder="yusuf@example.com">
+                </div>
+                <div class="input-group">
+                    <label>رقم الهاتف (اختياري)</label>
+                    <input type="tel" placeholder="+964 7XX XXX XXXX">
+                </div>
+                <div class="input-group">
+                    <label>لينك ملف أعمالك / LinkedIn</label>
+                    <input type="url" placeholder="https://github.com/yusuf">
+                </div>
+                <div class="input-group">
+                    <label>لماذا تريد الانضمام لمستقبل؟ (اختياري)</label>
+                    <textarea placeholder="اكتب بكلماتك — ما نحب الردود الجاهزة..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label>السيرة الذاتية</label>
+                    <div class="file-upload-area" onclick="document.getElementById('cvFile').click()">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                        <p>اسحب ملفك هنا أو اضغط للاختيار</p>
+                        <span>PDF أو Word — بحد أقصى ٥ ميغا</span>
+                    </div>
+                    <input type="file" id="cvFile" accept=".pdf,.doc,.docx" style="display:none" onchange="handleFileSelect(this)">
+                    <div id="fileSelectedMsg" style="display:none; font-size:13px; color:var(--success); margin-top:8px; text-align:center;"></div>
+                </div>
+
+                <button class="btn-submit" onclick="handleApply()">أرسل طلبك</button>
+            </div>
+
+            <!-- رسالة النجاح -->
+            <div class="success-message" id="applySuccessMsg">
+                <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+                <h3>وصلنا طلبك! 🎉</h3>
+                <p>راح نراجعه خلال ٧ أيام عمل ونتواصل معك بالبريد الإلكتروني. حظك موفور يوسف!</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ==============================================================
+         🍞 تنبيه Toast
+         ============================================================== -->
+    <div class="toast" id="toast"></div>
+
+    <!-- ==============================================================
+         🧠 الجافاسكريبت الرئيسي
+         يوسف: الكود منظم بأقسام، كل قسم معلق عليه شرح
+         ============================================================== -->
+    <script>
+
+        /* ================================================================
+           🌙 إدارة الوضع الليلي (Dark Mode)
+           يوسف: نستخدم localStorage حتى نحفظ اختيار المستخدم
+           حتى لو أغلق المتصفح ورجع — يلاقي نفس الوضع
+           ================================================================ */
+
+        /**
+         * toggleTheme — يبدل بين الوضع الليلي والنهاري
+         * ويحفظ الاختيار في localStorage
+         */
+        function toggleTheme() {
+            // نجيب الوضع الحالي من الـ HTML element
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            // نطبق الوضع الجديد
+            document.documentElement.setAttribute('data-theme', newTheme);
+
+            // نحفظ الاختيار بالـ localStorage حتى يدوم
+            localStorage.setItem('mustaqbal-theme', newTheme);
+        }
+
+        /**
+         * loadSavedTheme — نحمل الثيم المحفوظ لما تفتح الصفحة
+         * يوسف: هاي الدالة تشتغل فوراً بأول الصفحة — قبل ما يشوف المستخدم أي شي
+         */
+        function loadSavedTheme() {
+            const savedTheme = localStorage.getItem('mustaqbal-theme');
+
+            // إذا في ثيم محفوظ، طبقه مباشرة
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } else {
+                // إذا ما في، نشوف إذا المستخدم يفضل الوضع الليلي بنظام تشغيله
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (prefersDark) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            }
+        }
+
+        // شغّل تحميل الثيم فوراً
+        loadSavedTheme();
+
+        /* ================================================================
+           📊 شريط تقدم التمرير (Scroll Progress Bar)
+           يوسف: نحسب كم نسبة الصفحة اتمررت ونعكسها على عرض الشريط
+           المعادلة: (التمرير الحالي / إجمالي التمرير الممكن) × 100
+           ================================================================ */
+
+        function updateScrollProgress() {
+            const scrollTop    = window.pageYOffset || document.documentElement.scrollTop;
+            const docHeight    = document.documentElement.scrollHeight - window.innerHeight;
+            const progress     = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+
+            document.getElementById('scroll-progress-bar').style.width = progress + '%';
+        }
+
+        /* ================================================================
+           🧭 تأثير الـ Navbar عند التمرير
+           يوسف: لما المستخدم يتمرر لأسفل، الـ nav يصغر شوية
+           ويحصل على ظل — يعطي إحساس عمق
+           ================================================================ */
+
+        function handleNavbarScroll() {
+            const navbar = document.getElementById('navbar');
+            const scrolled = window.pageYOffset > 50;
+
+            navbar.style.height   = scrolled ? '52px' : '60px';
+            navbar.style.boxShadow = scrolled ? '0 4px 20px rgba(0,0,0,0.07)' : 'none';
+        }
+
+        /* ================================================================
+           🎬 Scroll Reveal Animation
+           يوسف: نستخدم IntersectionObserver — أحسن من الـ scroll event
+           لأنه أسرع وما يثقل الصفحة
+           الـ Observer يراقب كل عنصر عنده class "scroll-reveal"
+           لما يدخل الشاشة، يضيف class "active" اللي يشغل الـ CSS animation
+           ================================================================ */
+
+        const revealObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // نوقف المراقبة بعد التفعيل — مو ضروري نراقب أكثر
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            },
+            {
+                // يفعل الـ animation لما ١٠٪ من العنصر يظهر
+                threshold: 0.10,
+                // يبدأ بمسافة ٤٠px قبل ما يدخل الشاشة — تأثير أسرع
+                rootMargin: '0px 0px -40px 0px'
+            }
+        );
+
+        // نراقب كل عناصر scroll-reveal
+        document.querySelectorAll('.scroll-reveal').forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        /* ================================================================
+           🔢 Counter Animation للإحصائيات
+           يوسف: لما يشوف المستخدم قسم الإحصائيات، الأرقام تتحرك من 0
+           للرقم الحقيقي — يعطي إحساس حيوية
+           ================================================================ */
+
+        function animateCounter(element, target, duration = 2000) {
+            let start = 0;
+            const increment = target / (duration / 16); // ~60fps
+
+            const timer = setInterval(() => {
+                start += increment;
+                if (start >= target) {
+                    clearInterval(timer);
+                    element.textContent = target + (target >= 10 && target <= 50 ? '+' : '+');
+                } else {
+                    element.textContent = Math.floor(start) + '+';
+                }
+            }, 16);
+        }
+
+        // مراقبة قسم الإحصائيات لتشغيل العداد
+        const statsSection = document.querySelector('.stats-section');
+        let countersStarted = false;
+
+        const statsObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !countersStarted) {
+                countersStarted = true;
+                document.querySelectorAll('.stat-number[data-target]').forEach(el => {
+                    const target = parseInt(el.getAttribute('data-target'));
+                    animateCounter(el, target);
+                });
+            }
+        }, { threshold: 0.3 });
+
+        if (statsSection) statsObserver.observe(statsSection);
+
+        /* ================================================================
+           🔍 نظام البحث والفلترة في الوظايف
+           يوسف: هاي أقوى لوجيك بالصفحة
+           —————————————————————————
+           كيف يشتغل؟
+           1. نجيب نص البحث من الـ input
+           2. نجيب الفلتر النشط (all/remote/onsite/hybrid)
+           3. نمر على كل job-card نشوف إذا يطابق الشرطين
+           4. لو يطابق: نخليه ظاهر، لو لا: نخبيه
+           5. نحدث عداد النتائج
+           ================================================================ */
+
+        // الفلتر النشط حالياً
+        let activeFilter = 'all';
+
+        /**
+         * setFilter — يبدل الفلتر النشط عند ضغط زر
+         * @param {HTMLElement} btn - الزر المضغوط عليه
+         * @param {string} filterValue - قيمة الفلتر
+         */
+        function setFilter(btn, filterValue) {
+            // نزيل active من كل الأزرار
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            // نضيف active للزر المضغوط
+            btn.classList.add('active');
+            activeFilter = filterValue;
+            filterJobs(); // نطبق الفلترة
+        }
+
+        /**
+         * filterJobs — دالة البحث والفلترة الرئيسية
+         * تشتغل في كل مرة يكتب المستخدم بشريط البحث أو يغير الفلتر
+         */
+        function filterJobs() {
+            // نجيب نص البحث ونحوله لحروف صغيرة حتى المقارنة تشتغل بشكل صحيح
+            const searchText = document.getElementById('jobSearchInput').value.toLowerCase().trim();
+
+            // نجيب كل بطاقات الوظايف بكل التبويبات
+            const allCards = document.querySelectorAll('.job-card');
+
+            let visibleCount = 0;
+
+            allCards.forEach(card => {
+                // نجيب بيانات البطاقة من الـ data-* attributes
+                const title    = card.getAttribute('data-title')?.toLowerCase() || '';
+                const location = card.getAttribute('data-location')?.toLowerCase() || '';
+                const type     = card.getAttribute('data-type') || '';
+                const skills   = card.getAttribute('data-skills')?.toLowerCase() || '';
+
+                // شرط البحث: هل النص يظهر في أي حقل؟
+                const matchesSearch =
+                    searchText === '' ||
+                    title.includes(searchText) ||
+                    location.includes(searchText) ||
+                    skills.includes(searchText);
+
+                // شرط الفلتر: هل نوع الوظيفة يطابق الفلتر المختار؟
+                const matchesFilter =
+                    activeFilter === 'all' ||
+                    type === activeFilter;
+
+                // لو يطابق الشرطين — نخليه ظاهر
+                if (matchesSearch && matchesFilter) {
+                    card.style.display = 'flex';
+                    card.style.flexDirection = 'column';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // نحدث عداد النتائج
+            const countEl = document.getElementById('jobsCount');
+            if (searchText || activeFilter !== 'all') {
+                countEl.innerHTML = `وجدنا <strong>${visibleCount}</strong> وظيفة تطابق بحثك`;
+            } else {
+                countEl.innerHTML = '';
+            }
+
+            // نظهر/نخبي رسالة "لا نتائج"
+            const noResults = document.getElementById('noResults');
+            noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        /* ================================================================
+           📑 نظام التبويب (Tabs)
+           يوسف: نفس اللوجيك القديم بس بنا عليه
+           ================================================================ */
+
+        function switchTab(evt, tabId) {
+            // نزيل active من كل التبويبات والمحتويات
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
+
+            // نفعل التبويب الجديد
+            const tab = document.getElementById(tabId);
+            if (tab) tab.classList.add('active');
+            evt.currentTarget.classList.add('active');
+
+            // نعيد تشغيل الفلترة على التبويب الجديد
+            filterJobs();
+        }
+
+        /* ================================================================
+           🪟 إدارة الـ Modals
+           يوسف: ٣ دوال بسيطة تفتح وتقفل الـ Modals
+           ================================================================ */
+
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            document.body.style.overflow = 'hidden'; // نمنع التمرير خلف الـ modal
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+            document.body.style.overflow = ''; // نرجع التمرير
+        }
+
+        /**
+         * handleOverlayClick — يقفل الـ modal لما تضغط على الخلفية
+         * يوسف: نتحقق إن الضغطة على الـ overlay نفسه مو على الـ card
+         */
+        function handleOverlayClick(event, modalId) {
+            if (event.target === event.currentTarget) {
+                closeModal(modalId);
+            }
+        }
+
+        /* ================================================================
+           📝 فتح مودال التقديم على وظيفة معينة
+           يوسف: نأخذ اسم الوظيفة ونضعه بعنوان المودال
+           ================================================================ */
+
+        function openApplyModal(jobTitle) {
+            // نحدث عنوان المودال باسم الوظيفة
+            document.getElementById('applyJobTitle').textContent = 'تقدم لوظيفة: ' + jobTitle;
+
+            // نتأكد إن النموذج ظاهر ورسالة النجاح مخبية
+            document.getElementById('applyFormBody').style.display = 'block';
+            document.getElementById('applySuccessMsg').style.display = 'none';
+
+            openModal('applyModal');
+        }
+
+        /* ================================================================
+           📁 معالجة اختيار الملف (CV Upload)
+           ================================================================ */
+
+        function handleFileSelect(input) {
+            const file = input.files[0];
+            if (file) {
+                const msg = document.getElementById('fileSelectedMsg');
+                msg.style.display = 'block';
+                msg.textContent = '✓ تم اختيار: ' + file.name;
+            }
+        }
+
+        /* ================================================================
+           📬 معالجة إرسال الطلب
+           يوسف: نحاكي الإرسال بـ setTimeout — بالمشروع الحقيقي
+           تستبدل هاي بـ fetch request لسيرفرك
+           ================================================================ */
+
+        function handleApply() {
+            const btn = document.querySelector('#applyFormBody .btn-submit');
+
+            // نضيف حالة Loading
+            btn.classList.add('btn-loading');
+            btn.textContent = '';
+
+            // نحاكي انتظار السيرفر (1.5 ثانية)
+            setTimeout(() => {
+                btn.classList.remove('btn-loading');
+
+                // نخبي النموذج ونظهر رسالة النجاح
+                document.getElementById('applyFormBody').style.display = 'none';
+                document.getElementById('applySuccessMsg').style.display = 'block';
+
+                // بعد 4 ثواني نغلق المودال تلقائياً
+                setTimeout(() => {
+                    closeModal('applyModal');
+                    showToast('وصلنا طلبك! سنتواصل معك قريباً 🎉');
+                }, 3500);
+            }, 1500);
+        }
+
+        /* ================================================================
+           🔐 محاكاة تسجيل الدخول
+           ================================================================ */
+
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) {
+                showToast('يوسف، خلي تملأ كل الحقول أول 😅');
+                return;
+            }
+
+            const btn = document.querySelector('#loginFormBody .btn-submit');
+            btn.classList.add('btn-loading');
+            btn.textContent = '';
+
+            setTimeout(() => {
+                btn.classList.remove('btn-loading');
+                btn.textContent = 'دخول';
+                closeModal('loginModal');
+                showToast('أهلاً بك من جديد! 👋');
+            }, 1200);
+        }
+
+        /* ================================================================
+           📝 محاكاة إنشاء حساب
+           ================================================================ */
+
+        function handleRegister() {
+            const name     = document.getElementById('regName').value;
+            const email    = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+
+            if (!name || !email || !password) {
+                showToast('اكمل كل الحقول لو سمحت 🙏');
+                return;
+            }
+
+            if (password.length < 8) {
+                showToast('كلمة المرور تحتاج تكون ٨ أحرف على الأقل');
+                return;
+            }
+
+            const btn = document.querySelector('#registerFormBody .btn-submit');
+            btn.classList.add('btn-loading');
+            btn.textContent = '';
+
+            setTimeout(() => {
+                btn.classList.remove('btn-loading');
+                btn.textContent = 'إنشاء حساب';
+                closeModal('registerModal');
+                showToast('أهلاً ' + name.split(' ')[0] + '! حسابك جاهز 🎉');
+            }, 1500);
+        }
+
+        /* ================================================================
+           📰 الاشتراك بالنشرة البريدية
+           ================================================================ */
+
+        function subscribeNewsletter() {
+            const emailInput = document.getElementById('newsletterEmail');
+            const email = emailInput.value.trim();
+
+            // تحقق بسيط من صيغة الإيميل
+            if (!email || !email.includes('@')) {
+                showToast('اكتب إيميل صحيح يوسف 📧');
+                return;
+            }
+
+            showToast('انضممت للنشرة! ما راح تفوتك وظيفة 💌');
+            emailInput.value = '';
+        }
+
+        /* ================================================================
+           🦗 الأكورديون (FAQ Accordion)
+           يوسف: نستخدم max-height trick بالـ CSS حتى الأنيميشن تشتغل
+           display:none ما يدعم transition — max-height يدعمه
+           ================================================================ */
+
+        function toggleAccordion(header) {
+            const item = header.parentElement;
+            const isActive = item.classList.contains('active');
+
+            // نغلق كل الأكورديونات المفتوحة أول
+            document.querySelectorAll('.accordion-item.active').forEach(openItem => {
+                openItem.classList.remove('active');
+            });
+
+            // لو الضغطة على عنصر مو مفتوح — نفتحه
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        }
+
+        /* ================================================================
+           📱 قائمة الموبايل
+           ================================================================ */
+
+        function toggleMobileNav() {
+            const nav = document.getElementById('mobileNav');
+            nav.classList.toggle('open');
+        }
+
+        function closeMobileNav() {
+            document.getElementById('mobileNav').classList.remove('open');
+        }
+
+        /* ================================================================
+           🍞 Toast Notification
+           يوسف: يظهر رسالة صغيرة في أسفل الشاشة وبعد ثلاث ثواني تختفي
+           ================================================================ */
+
+        let toastTimer = null; // نحفظ الـ timer حتى نلغيه لو جاء toast جديد قبل انتهاء الأول
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+
+            // نلغي الـ timer السابق لو موجود
+            if (toastTimer) {
+                clearTimeout(toastTimer);
+                toast.classList.remove('show');
+                // انتظر frame واحد حتى يتطبق الـ remove قبل نضيف show مرة ثانية
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        toast.classList.add('show');
+                    });
+                });
+            } else {
+                toast.classList.add('show');
+            }
+
+            // نخبي الـ toast بعد ٣ ثواني
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('show');
+                toastTimer = null;
+            }, 3000);
+        }
+
+        /* ================================================================
+           🎧 تجميع كل الـ Scroll Events
+           يوسف: نستخدم دالة واحدة للـ scroll بدل ما نضيف addEventListener
+           أكثر من مرة — أحسن للـ Performance
+           ================================================================ */
+
+        function handleScroll() {
+            updateScrollProgress();
+            handleNavbarScroll();
+        }
+
+        // نضيف الـ Event Listener مرة واحدة
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        // نشغله مرة أول تحميل الصفحة
+        handleScroll();
+
+        /* ================================================================
+           ⌨️ إغلاق الـ Modals بضغط Escape
+           يوسف: UX تفصيلة صغيرة تفرق كبير بتجربة المستخدم
+           ================================================================ */
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                // نغلق أي modal مفتوح
+                document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+                    modal.classList.remove('active');
+                });
+                document.body.style.overflow = '';
+
+                // نغلق قائمة الموبايل
+                closeMobileNav();
+            }
+        });
+
+        /* ================================================================
+           🖥️ تهيئة الصفحة عند التحميل
+           يوسف: كل شي نشغله هنا لما تتحمل الصفحة لأول مرة
+           ================================================================ */
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // تحديث عداد الوظايف الأولي
+            filterJobs();
+
+            // console رسالة للمطورين — يوسف شفها 😄
+            console.log('%c مستقبل. — جاهز للإبداع يا يوسف 🚀', 'font-size:18px; font-weight:600; color:#000; background:#f5f5f7; padding:10px 20px; border-radius:8px;');
+            console.log('%c الكود المصدري نظيف ومعلق — ما في أسرار هنا 😄', 'font-size:13px; color:#86868b;');
+        });
+
+    </script>
+
+</body>
+</html>
